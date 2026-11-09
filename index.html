@@ -35,14 +35,14 @@ body, html {
     align-items: center;
     width: 100vw;
     height: 100vh;
-    padding: 6px;
+    padding: 5px;
     background: #03030d;
 }
 
 h1 {
     color: #00eaff;
     text-shadow: 0 0 15px #00eaff;
-    font-size: 16px;
+    font-size: 17px;
     margin: 2px 0;
 }
 
@@ -57,7 +57,7 @@ canvas {
     box-shadow: 0 0 20px #00eaff;
     width: 100%;
     flex-grow: 1;
-    max-height: 64vh;
+    max-height: 65vh;
     display: block;
 }
 
@@ -73,7 +73,7 @@ canvas {
 }
 
 .screen h2 {
-    font-size: 32px;
+    font-size: 34px;
     color: #00eaff;
     text-shadow: 0 0 20px #00eaff;
     margin: 10px;
@@ -125,7 +125,7 @@ button:hover {
 
 /* 🎮 MOBILE CONTROL BOX (NEAT & CLEAN PANEL) */
 #control-panel {
-    background: rgba(5, 5, 32, 0.85);
+    background: rgba(5, 5, 32, 0.9);
     border: 2px solid rgba(0, 234, 255, 0.4);
     box-shadow: 0 0 15px rgba(0, 234, 255, 0.2);
     border-radius: 15px;
@@ -134,21 +134,21 @@ button:hover {
     display: flex;
     justify-content: space-around;
     align-items: center;
-    padding: 8px 10px;
+    padding: 6px 10px;
     margin-bottom: 2px;
 }
 
 .dpad {
     display: grid;
     grid-template-columns: 55px 55px 55px;
-    grid-template-rows: 42px 42px;
+    grid-template-rows: 40px 40px;
     gap: 3px;
     justify-content: center;
 }
 
 .mob-btn {
     font-size: 18px;
-    background: rgba(0, 234, 255, 0.2);
+    background: rgba(0, 234, 255, 0.25);
     border: 2px solid #00eaff;
     color: #00eaff;
     border-radius: 8px;
@@ -160,7 +160,7 @@ button:hover {
 }
 
 .mob-btn:active {
-    background: rgba(0, 234, 255, 0.6);
+    background: rgba(0, 234, 255, 0.7);
 }
 
 #upBtn { grid-column: 2; grid-row: 1; }
@@ -169,11 +169,11 @@ button:hover {
 #rightBtn { grid-column: 3; grid-row: 2; }
 
 #shootBtn {
-    background: rgba(255, 49, 88, 0.25);
+    background: rgba(255, 49, 88, 0.3);
     border: 2px solid #ff3158;
     color: #ff3158;
     width: 100px;
-    height: 75px;
+    height: 70px;
     font-size: 16px;
     font-weight: bold;
     border-radius: 12px;
@@ -185,7 +185,7 @@ button:hover {
 }
 
 #shootBtn:active {
-    background: rgba(255, 49, 88, 0.6);
+    background: rgba(255, 49, 88, 0.7);
 }
 </style>
 </head>
@@ -247,7 +247,7 @@ const ctx = canvas.getContext("2d");
 
 function resizeCanvas() {
     canvas.width = window.innerWidth > 800 ? 800 : window.innerWidth - 10;
-    canvas.height = window.innerHeight * 0.60;
+    canvas.height = window.innerHeight * 0.62;
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
@@ -685,7 +685,7 @@ function drawStars() {
 
 
 // ======================================
-// COLLISION
+// COLLISION (PRECISE)
 // ======================================
 
 function collision(a, b) {
@@ -750,12 +750,14 @@ function gameLoop() {
         enemy.y += enemy.speed;
         drawEnemy(enemy);
 
+        // ONLY reduce life when actually touching the player
         if (collision(player, enemy)) {
             enemies.splice(ei, 1);
             lives--;
             sound("hit");
             updateUI();
-        } else if (enemy.y > canvas.height) {
+        } 
+        else if (enemy.y > canvas.height) {
             enemies.splice(ei, 1);
         }
 
