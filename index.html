@@ -23,13 +23,13 @@ body {
 h1 {
     color: #00eaff;
     text-shadow: 0 0 15px #00eaff;
-    margin: 6px 0 2px 0;
-    font-size: 22px;
+    margin: 5px 0 2px 0;
+    font-size: 20px;
 }
 
 #info {
-    font-size: 15px;
-    margin-bottom: 4px;
+    font-size: 14px;
+    margin-bottom: 3px;
 }
 
 canvas {
@@ -37,7 +37,7 @@ canvas {
     border: 2px solid #00eaff;
     box-shadow: 0 0 20px #00eaff;
     max-width: 95vw;
-    max-height: 62vh;
+    max-height: 58vh;
     display: block;
     margin: 0 auto;
 }
@@ -54,20 +54,20 @@ canvas {
 }
 
 .screen h2 {
-    font-size: 36px;
+    font-size: 34px;
     color: #00eaff;
     text-shadow: 0 0 20px #00eaff;
     margin: 10px;
 }
 
 .screen p {
-    margin: 6px 0;
-    font-size: 15px;
+    margin: 5px 0;
+    font-size: 14px;
 }
 
 button {
-    padding: 12px 30px;
-    font-size: 18px;
+    padding: 10px 25px;
+    font-size: 16px;
     font-weight: bold;
     border: 0;
     border-radius: 10px;
@@ -75,7 +75,7 @@ button {
     background: #00eaff;
     color: #001018;
     box-shadow: 0 0 20px #00eaff;
-    margin-top: 10px;
+    margin-top: 8px;
 }
 
 button:hover {
@@ -93,10 +93,10 @@ button:hover {
 
 #message {
     position: fixed;
-    top: 60px;
+    top: 55px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 22px;
+    font-size: 20px;
     font-weight: bold;
     color: yellow;
     text-shadow: 0 0 15px yellow;
@@ -107,25 +107,27 @@ button:hover {
 #controls {
     display: flex;
     justify-content: space-between;
+    align-items: center;
     width: 95vw;
     max-width: 800px;
-    margin: 8px auto 0 auto;
-    padding: 0 10px;
+    margin: 6px auto 0 auto;
+    padding: 0 5px;
 }
 
-.control-group {
-    display: flex;
-    gap: 15px;
+.dpad {
+    display: grid;
+    grid-template-columns: 50px 50px 50px;
+    grid-template-rows: 45px 45px;
+    gap: 3px;
+    justify-content: center;
 }
 
 .mob-btn {
-    width: 65px;
-    height: 55px;
-    font-size: 20px;
+    font-size: 18px;
     background: rgba(0, 234, 255, 0.2);
     border: 2px solid #00eaff;
     color: #00eaff;
-    border-radius: 12px;
+    border-radius: 8px;
     display: flex;
     align-items: center;
     justify-content: center;
@@ -137,11 +139,25 @@ button:hover {
     background: rgba(0, 234, 255, 0.6);
 }
 
+#upBtn { grid-column: 2; grid-row: 1; }
+#leftBtn { grid-column: 1; grid-row: 2; }
+#downBtn { grid-column: 2; grid-row: 2; }
+#rightBtn { grid-column: 3; grid-row: 2; }
+
 #shootBtn {
-    background: rgba(255, 49, 88, 0.2);
+    background: rgba(255, 49, 88, 0.25);
     border: 2px solid #ff3158;
     color: #ff3158;
-    width: 85px;
+    width: 90px;
+    height: 70px;
+    font-size: 18px;
+    font-weight: bold;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
 }
 
 #shootBtn:active {
@@ -162,15 +178,17 @@ button:hover {
     ⭐ Level: <span id="level">1</span>
 </div>
 
-<canvas id="game" width="800" height="480"></canvas>
+<canvas id="game" width="800" height="450"></canvas>
 
 <!-- MOBILE CONTROLS -->
 <div id="controls">
-    <div class="control-group">
+    <div class="dpad">
+        <div class="mob-btn" id="upBtn">⬆️</div>
         <div class="mob-btn" id="leftBtn">⬅️</div>
+        <div class="mob-btn" id="downBtn">⬇️</div>
         <div class="mob-btn" id="rightBtn">➡️</div>
     </div>
-    <div class="mob-btn" id="shootBtn">🔥 SHOOT</div>
+    <div id="shootBtn">🔥 FIRE</div>
 </div>
 
 <div id="message"></div>
@@ -179,7 +197,8 @@ button:hover {
 <div id="startScreen" class="screen">
     <h2>🚀 SPACE SHOOTER</h2>
     <p><b>Created by Utkarsh</b></p>
-    <p>⬅️ ➡️ / A D = Move | SPACE = Shoot</p>
+    <p>⬆️ ⬇️ ⬅️ ➡️ / W A S D = Move Anywhere</p>
+    <p>SPACE / FIRE = Heavy Laser Gun</p>
     <button onclick="startGame()">START GAME</button>
 </div>
 
@@ -225,21 +244,21 @@ function sound(type) {
 
     if (type === "shoot") {
 
-        osc.type = "square";
-        osc.frequency.setValueAtTime(900, now);
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(1200, now);
         osc.frequency.exponentialRampToValueAtTime(
-            180,
-            now + .12
+            200,
+            now + .15
         );
 
-        gain.gain.setValueAtTime(.12, now);
+        gain.gain.setValueAtTime(.15, now);
         gain.gain.exponentialRampToValueAtTime(
             .01,
-            now + .12
+            now + .15
         );
 
         osc.start();
-        osc.stop(now + .12);
+        osc.stop(now + .15);
     }
 
     if (type === "explosion") {
@@ -386,7 +405,7 @@ let boss = null;
 const player = {
 
     x: 370,
-    y: 410,
+    y: 370,
 
     width: 60,
     height: 45,
@@ -404,7 +423,7 @@ document.addEventListener("keydown", e => {
 
     keys[e.key.toLowerCase()] = true;
 
-    if (e.code === "Space") {
+    if (e.code === "Space" || e.key === " ") {
         e.preventDefault();
     }
 
@@ -416,21 +435,33 @@ document.addEventListener("keyup", e => {
 
 });
 
+const upBtn = document.getElementById("upBtn");
+const downBtn = document.getElementById("downBtn");
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 const shootBtn = document.getElementById("shootBtn");
 
-leftBtn.addEventListener("touchstart", () => { keys["arrowleft"] = true; });
+upBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keys["arrowup"] = true; });
+upBtn.addEventListener("touchend", () => { keys["arrowup"] = false; });
+upBtn.addEventListener("mousedown", () => { keys["arrowup"] = true; });
+upBtn.addEventListener("mouseup", () => { keys["arrowup"] = false; });
+
+downBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keys["arrowdown"] = true; });
+downBtn.addEventListener("touchend", () => { keys["arrowdown"] = false; });
+downBtn.addEventListener("mousedown", () => { keys["arrowdown"] = true; });
+downBtn.addEventListener("mouseup", () => { keys["arrowdown"] = false; });
+
+leftBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keys["arrowleft"] = true; });
 leftBtn.addEventListener("touchend", () => { keys["arrowleft"] = false; });
 leftBtn.addEventListener("mousedown", () => { keys["arrowleft"] = true; });
 leftBtn.addEventListener("mouseup", () => { keys["arrowleft"] = false; });
 
-rightBtn.addEventListener("touchstart", () => { keys["arrowright"] = true; });
+rightBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keys["arrowright"] = true; });
 rightBtn.addEventListener("touchend", () => { keys["arrowright"] = false; });
 rightBtn.addEventListener("mousedown", () => { keys["arrowright"] = true; });
 rightBtn.addEventListener("mouseup", () => { keys["arrowright"] = false; });
 
-shootBtn.addEventListener("touchstart", () => { keys[" "] = true; });
+shootBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keys[" "] = true; });
 shootBtn.addEventListener("touchend", () => { keys[" "] = false; });
 shootBtn.addEventListener("mousedown", () => { keys[" "] = true; });
 shootBtn.addEventListener("mouseup", () => { keys[" "] = false; });
@@ -484,6 +515,7 @@ function startGame() {
     boss = null;
 
     player.x = canvas.width / 2 - 30;
+    player.y = canvas.height - 80;
 
     running = true;
 
@@ -589,22 +621,22 @@ function drawPlayer() {
 
 
 // ======================================
-// SHOOT (FIRE GUN)
+// SHOOT (HEAVY LASER GUN)
 // ======================================
 
 function shoot() {
 
     bullets.push({
 
-        x: player.x + player.width / 2 - 3,
+        x: player.x + player.width / 2 - 4,
 
         y: player.y,
 
-        width: 6,
+        width: 8,
 
-        height: 15,
+        height: 22,
 
-        speed: 11
+        speed: 14
 
     });
 
@@ -685,15 +717,15 @@ function drawEnemy(enemy) {
 
 
 // ======================================
-// BULLET
+// BULLET (HEAVY LASER)
 // ======================================
 
 function drawBullet(bullet) {
 
-    ctx.fillStyle = "yellow";
+    ctx.fillStyle = "#ffdd00";
 
-    ctx.shadowBlur = 15;
-    ctx.shadowColor = "yellow";
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "#ff5500";
 
     ctx.fillRect(
         bullet.x,
@@ -917,7 +949,7 @@ function gameLoop() {
 
 
 // --------------------------------------
-// PLAYER MOVEMENT
+// PLAYER MOVEMENT (ALL 4 DIRECTIONS)
 // --------------------------------------
 
     if (
@@ -938,6 +970,25 @@ function gameLoop() {
 
     }
 
+    if (
+        keys["arrowup"] ||
+        keys["w"]
+    ) {
+
+        player.y -= player.speed;
+
+    }
+
+    if (
+        keys["arrowdown"] ||
+        keys["s"]
+    ) {
+
+        player.y += player.speed;
+
+    }
+
+    // Boundaries
     if (player.x < 0)
         player.x = 0;
 
@@ -952,9 +1003,23 @@ function gameLoop() {
 
     }
 
+    if (player.y < 0)
+        player.y = 0;
+
+    if (
+        player.y + player.height >
+        canvas.height
+    ) {
+
+        player.y =
+            canvas.height -
+            player.height;
+
+    }
+
 
 // --------------------------------------
-// SHOOT (FIRE GUN)
+// SHOOT (HEAVY LASER GUN)
 // --------------------------------------
 
     if (
@@ -964,7 +1029,7 @@ function gameLoop() {
 
         const now = Date.now();
 
-        if (now - lastShot > 220) {
+        if (now - lastShot > 180) {
 
             shoot();
 
