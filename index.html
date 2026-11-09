@@ -14,10 +14,13 @@
 * {
     box-sizing: border-box;
     touch-action: manipulation;
+    margin: 0;
+    padding: 0;
 }
 
-body {
-    margin: 0;
+body, html {
+    width: 100%;
+    height: 100%;
     background: #03030d;
     color: white;
     font-family: Arial, sans-serif;
@@ -25,26 +28,36 @@ body {
     overflow: hidden;
 }
 
+#game-container {
+    display: flex;
+    flex-direction: column;
+    justify-content: space-between;
+    align-items: center;
+    width: 100vw;
+    height: 100vh;
+    padding: 5px;
+}
+
 h1 {
     color: #00eaff;
     text-shadow: 0 0 15px #00eaff;
-    margin: 5px 0 2px 0;
-    font-size: 20px;
+    font-size: 18px;
+    margin: 2px 0;
 }
 
 #info {
-    font-size: 14px;
-    margin-bottom: 3px;
+    font-size: 13px;
+    margin-bottom: 2px;
 }
 
 canvas {
     background: #050520;
     border: 2px solid #00eaff;
-    box-shadow: 0 0 20px #00eaff;
-    max-width: 95vw;
-    max-height: 58vh;
+    box-shadow: 0 0 25px #00eaff;
+    width: 100%;
+    flex-grow: 1;
+    max-height: 72vh;
     display: block;
-    margin: 0 auto;
 }
 
 .screen {
@@ -71,8 +84,8 @@ canvas {
 }
 
 button {
-    padding: 10px 25px;
-    font-size: 16px;
+    padding: 12px 30px;
+    font-size: 18px;
     font-weight: bold;
     border: 0;
     border-radius: 10px;
@@ -80,7 +93,7 @@ button {
     background: #00eaff;
     color: #001018;
     box-shadow: 0 0 20px #00eaff;
-    margin-top: 8px;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -98,7 +111,7 @@ button:hover {
 
 #message {
     position: fixed;
-    top: 55px;
+    top: 50px;
     left: 50%;
     transform: translateX(-50%);
     font-size: 20px;
@@ -106,6 +119,7 @@ button:hover {
     color: yellow;
     text-shadow: 0 0 15px yellow;
     pointer-events: none;
+    z-index: 5;
 }
 
 /* MOBILE TOUCH CONTROLS */
@@ -113,22 +127,21 @@ button:hover {
     display: flex;
     justify-content: space-between;
     align-items: center;
-    width: 95vw;
+    width: 100%;
     max-width: 800px;
-    margin: 6px auto 0 auto;
-    padding: 0 5px;
+    padding: 5px 10px;
 }
 
 .dpad {
     display: grid;
     grid-template-columns: 50px 50px 50px;
-    grid-template-rows: 45px 45px;
+    grid-template-rows: 40px 40px;
     gap: 3px;
     justify-content: center;
 }
 
 .mob-btn {
-    font-size: 18px;
+    font-size: 16px;
     background: rgba(0, 234, 255, 0.2);
     border: 2px solid #00eaff;
     color: #00eaff;
@@ -150,12 +163,12 @@ button:hover {
 #rightBtn { grid-column: 3; grid-row: 2; }
 
 #shootBtn {
-    background: rgba(255, 49, 88, 0.25);
+    background: rgba(255, 49, 88, 0.3);
     border: 2px solid #ff3158;
     color: #ff3158;
     width: 90px;
-    height: 70px;
-    font-size: 18px;
+    height: 60px;
+    font-size: 16px;
     font-weight: bold;
     border-radius: 12px;
     display: flex;
@@ -166,34 +179,37 @@ button:hover {
 }
 
 #shootBtn:active {
-    background: rgba(255, 49, 88, 0.6);
+    background: rgba(255, 49, 88, 0.7);
 }
 </style>
 </head>
 
 <body>
 
-<h1>🚀 SPACE SHOOTER - UTKARSH</h1>
-
-<div id="info">
-    Score: <span id="score">0</span>
-    &nbsp; | &nbsp;
-    ❤️ Lives: <span id="lives">3</span>
-    &nbsp; | &nbsp;
-    ⭐ Level: <span id="level">1</span>
-</div>
-
-<canvas id="game" width="800" height="450"></canvas>
-
-<!-- MOBILE CONTROLS -->
-<div id="controls">
-    <div class="dpad">
-        <div class="mob-btn" id="upBtn">⬆️</div>
-        <div class="mob-btn" id="leftBtn">⬅️</div>
-        <div class="mob-btn" id="downBtn">⬇️</div>
-        <div class="mob-btn" id="rightBtn">➡️</div>
+<div id="game-container">
+    <div>
+        <h1>🚀 SPACE SHOOTER - UTKARSH</h1>
+        <div id="info">
+            Score: <span id="score">0</span>
+            &nbsp; | &nbsp;
+            ❤️ Lives: <span id="lives">3</span>
+            &nbsp; | &nbsp;
+            ⭐ Level: <span id="level">1</span>
+        </div>
     </div>
-    <div id="shootBtn">🔥 FIRE</div>
+
+    <canvas id="game"></canvas>
+
+    <!-- MOBILE CONTROLS -->
+    <div id="controls">
+        <div class="dpad">
+            <div class="mob-btn" id="upBtn">⬆️</div>
+            <div class="mob-btn" id="leftBtn">⬅️</div>
+            <div class="mob-btn" id="downBtn">⬇️</div>
+            <div class="mob-btn" id="rightBtn">➡️</div>
+        </div>
+        <div id="shootBtn">🔥 FIRE</div>
+    </div>
 </div>
 
 <div id="message"></div>
@@ -203,7 +219,7 @@ button:hover {
     <h2>🚀 SPACE SHOOTER</h2>
     <p><b>Created by Utkarsh</b></p>
     <p>⬆️ ⬇️ ⬅️ ➡️ / W A S D = Move Anywhere</p>
-    <p>SPACE / FIRE = Heavy Laser Gun</p>
+    <p>SPACE / FIRE = Khatarnak Laser Gun</p>
     <button onclick="startGame()">START GAME</button>
 </div>
 
@@ -217,15 +233,22 @@ button:hover {
 <script>
 
 // ======================================
-// CANVAS
+// CANVAS & FULLSCREEN SIZING
 // ======================================
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
+function resizeCanvas() {
+    canvas.width = window.innerWidth > 800 ? 800 : window.innerWidth - 10;
+    canvas.height = window.innerHeight * 0.65;
+}
+window.addEventListener("resize", resizeCanvas);
+resizeCanvas();
+
 
 // ======================================
-// AUDIO SYSTEM
+// REAL AUDIO SYSTEM (HEAVY LASER)
 // ======================================
 
 const AudioContext =
@@ -248,26 +271,25 @@ function sound(type) {
     const now = audioCtx.currentTime;
 
     if (type === "shoot") {
-
+        // Real heavy laser sound
         osc.type = "sawtooth";
-        osc.frequency.setValueAtTime(1200, now);
+        osc.frequency.setValueAtTime(1400, now);
         osc.frequency.exponentialRampToValueAtTime(
-            200,
-            now + .15
+            150,
+            now + .18
         );
 
-        gain.gain.setValueAtTime(.15, now);
+        gain.gain.setValueAtTime(.2, now);
         gain.gain.exponentialRampToValueAtTime(
             .01,
-            now + .15
+            now + .18
         );
 
         osc.start();
-        osc.stop(now + .15);
+        osc.stop(now + .18);
     }
 
     if (type === "explosion") {
-
         osc.type = "sawtooth";
         osc.frequency.setValueAtTime(180, now);
         osc.frequency.exponentialRampToValueAtTime(
@@ -286,7 +308,6 @@ function sound(type) {
     }
 
     if (type === "hit") {
-
         osc.type = "triangle";
         osc.frequency.setValueAtTime(350, now);
         osc.frequency.exponentialRampToValueAtTime(
@@ -305,75 +326,36 @@ function sound(type) {
     }
 
     if (type === "coin") {
-
         osc.type = "sine";
-
-        osc.frequency.setValueAtTime(
-            700,
-            now
-        );
-
-        osc.frequency.setValueAtTime(
-            1100,
-            now + .08
-        );
+        osc.frequency.setValueAtTime(700, now);
+        osc.frequency.setValueAtTime(1100, now + .08);
 
         gain.gain.setValueAtTime(.2, now);
-
-        gain.gain.exponentialRampToValueAtTime(
-            .01,
-            now + .2
-        );
+        gain.gain.exponentialRampToValueAtTime(.01, now + .2);
 
         osc.start();
         osc.stop(now + .2);
     }
 
     if (type === "boss") {
-
         osc.type = "sawtooth";
-
-        osc.frequency.setValueAtTime(
-            100,
-            now
-        );
-
-        osc.frequency.exponentialRampToValueAtTime(
-            40,
-            now + .8
-        );
+        osc.frequency.setValueAtTime(100, now);
+        osc.frequency.exponentialRampToValueAtTime(40, now + .8);
 
         gain.gain.setValueAtTime(.3, now);
-
-        gain.gain.exponentialRampToValueAtTime(
-            .01,
-            now + .8
-        );
+        gain.gain.exponentialRampToValueAtTime(.01, now + .8);
 
         osc.start();
         osc.stop(now + .8);
     }
 
     if (type === "gameover") {
-
         osc.type = "sine";
-
-        osc.frequency.setValueAtTime(
-            300,
-            now
-        );
-
-        osc.frequency.exponentialRampToValueAtTime(
-            50,
-            now + 1
-        );
+        osc.frequency.setValueAtTime(300, now);
+        osc.frequency.exponentialRampToValueAtTime(50, now + 1);
 
         gain.gain.setValueAtTime(.3, now);
-
-        gain.gain.exponentialRampToValueAtTime(
-            .01,
-            now + 1
-        );
+        gain.gain.exponentialRampToValueAtTime(.01, now + 1);
 
         osc.start();
         osc.stop(now + 1);
@@ -408,36 +390,27 @@ let boss = null;
 // ======================================
 
 const player = {
-
     x: 370,
     y: 370,
-
     width: 60,
     height: 45,
-
     speed: 7
-
 };
 
 
 // ======================================
-// KEYBOARD & TOUCH CONTROLS
+// CONTROLS
 // ======================================
 
 document.addEventListener("keydown", e => {
-
     keys[e.key.toLowerCase()] = true;
-
     if (e.code === "Space" || e.key === " ") {
         e.preventDefault();
     }
-
 });
 
 document.addEventListener("keyup", e => {
-
     keys[e.key.toLowerCase()] = false;
-
 });
 
 const upBtn = document.getElementById("upBtn");
@@ -478,20 +451,13 @@ shootBtn.addEventListener("mouseup", () => { keys[" "] = false; });
 
 let stars = [];
 
-for (let i = 0; i < 120; i++) {
-
+for (let i = 0; i < 150; i++) {
     stars.push({
-
         x: Math.random() * canvas.width,
-
         y: Math.random() * canvas.height,
-
         size: Math.random() * 3,
-
         speed: Math.random() * 2 + .5
-
     });
-
 }
 
 
@@ -500,14 +466,11 @@ for (let i = 0; i < 120; i++) {
 // ======================================
 
 function startGame() {
-
     if (audioCtx.state === "suspended") {
         audioCtx.resume();
     }
 
-    document
-        .getElementById("startScreen")
-        .classList.add("hidden");
+    document.getElementById("startScreen").classList.add("hidden");
 
     score = 0;
     lives = 3;
@@ -516,18 +479,14 @@ function startGame() {
     bullets = [];
     enemies = [];
     powerUps = [];
-
     boss = null;
 
     player.x = canvas.width / 2 - 30;
     player.y = canvas.height - 80;
 
     running = true;
-
     updateUI();
-
     gameLoop();
-
 }
 
 
@@ -536,48 +495,27 @@ function startGame() {
 // ======================================
 
 function restartGame() {
-
-    document
-        .getElementById("gameOver")
-        .classList.add("hidden");
-
+    document.getElementById("gameOver").classList.add("hidden");
     startGame();
-
 }
 
 
 // ======================================
-// UI
+// UI & MESSAGES
 // ======================================
 
 function updateUI() {
-
     document.getElementById("score").textContent = score;
-
     document.getElementById("lives").textContent = lives;
-
     document.getElementById("level").textContent = level;
-
 }
 
-
-// ======================================
-// MESSAGE
-// ======================================
-
 function showMessage(text) {
-
-    const msg =
-        document.getElementById("message");
-
+    const msg = document.getElementById("message");
     msg.textContent = text;
-
     setTimeout(() => {
-
         msg.textContent = "";
-
     }, 1500);
-
 }
 
 
@@ -586,67 +524,45 @@ function showMessage(text) {
 // ======================================
 
 function drawPlayer() {
-
     ctx.save();
-
-    ctx.shadowBlur = 20;
+    ctx.shadowBlur = 25;
     ctx.shadowColor = "#00eaff";
-
     ctx.fillStyle = "#00eaff";
 
     ctx.beginPath();
-
-    ctx.moveTo(
-        player.x + player.width / 2,
-        player.y
-    );
-
-    ctx.lineTo(
-        player.x,
-        player.y + player.height
-    );
-
-    ctx.lineTo(
-        player.x + player.width / 2,
-        player.y + player.height - 12
-    );
-
-    ctx.lineTo(
-        player.x + player.width,
-        player.y + player.height
-    );
-
+    ctx.moveTo(player.x + player.width / 2, player.y);
+    ctx.lineTo(player.x, player.y + player.height);
+    ctx.lineTo(player.x + player.width / 2, player.y + player.height - 12);
+    ctx.lineTo(player.x + player.width, player.y + player.height);
     ctx.closePath();
-
     ctx.fill();
-
     ctx.restore();
-
 }
 
 
 // ======================================
-// SHOOT (HEAVY LASER GUN)
+// KHATARNAK LASER BULLET
 // ======================================
 
 function shoot() {
-
     bullets.push({
-
-        x: player.x + player.width / 2 - 4,
-
+        x: player.x + player.width / 2 - 5,
         y: player.y,
-
-        width: 8,
-
-        height: 22,
-
-        speed: 14
-
+        width: 10,
+        height: 28,
+        speed: 16
     });
 
     sound("shoot");
+}
 
+function drawBullet(bullet) {
+    ctx.save();
+    ctx.fillStyle = "#00ffff";
+    ctx.shadowBlur = 25;
+    ctx.shadowColor = "#ff00ff";
+    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    ctx.restore();
 }
 
 
@@ -655,92 +571,29 @@ function shoot() {
 // ======================================
 
 function createEnemy() {
-
     enemies.push({
-
-        x: Math.random() *
-            (canvas.width - 45),
-
+        x: Math.random() * (canvas.width - 45),
         y: -50,
-
         width: 45,
-
         height: 40,
-
-        speed:
-            2 +
-            Math.random() * 2 +
-            level * .2
-
+        speed: 2 + Math.random() * 2 + level * .2
     });
-
 }
 
-
-// ======================================
-// DRAW ENEMY
-// ======================================
-
 function drawEnemy(enemy) {
-
     ctx.save();
-
     ctx.fillStyle = "#ff3158";
-
-    ctx.shadowBlur = 15;
+    ctx.shadowBlur = 18;
     ctx.shadowColor = "#ff3158";
 
     ctx.beginPath();
-
-    ctx.moveTo(
-        enemy.x + enemy.width / 2,
-        enemy.y
-    );
-
-    ctx.lineTo(
-        enemy.x + enemy.width,
-        enemy.y + enemy.height
-    );
-
-    ctx.lineTo(
-        enemy.x + enemy.width / 2,
-        enemy.y + enemy.height - 10
-    );
-
-    ctx.lineTo(
-        enemy.x,
-        enemy.y + enemy.height
-    );
-
+    ctx.moveTo(enemy.x + enemy.width / 2, enemy.y);
+    ctx.lineTo(enemy.x + enemy.width, enemy.y + enemy.height);
+    ctx.lineTo(enemy.x + enemy.width / 2, enemy.y + enemy.height - 10);
+    ctx.lineTo(enemy.x, enemy.y + enemy.height);
     ctx.closePath();
-
     ctx.fill();
-
     ctx.restore();
-
-}
-
-
-// ======================================
-// BULLET (HEAVY LASER)
-// ======================================
-
-function drawBullet(bullet) {
-
-    ctx.fillStyle = "#ffdd00";
-
-    ctx.shadowBlur = 20;
-    ctx.shadowColor = "#ff5500";
-
-    ctx.fillRect(
-        bullet.x,
-        bullet.y,
-        bullet.width,
-        bullet.height
-    );
-
-    ctx.shadowBlur = 0;
-
 }
 
 
@@ -749,45 +602,24 @@ function drawBullet(bullet) {
 // ======================================
 
 function createPowerUp(x, y) {
-
     powerUps.push({
-
         x: x,
-
         y: y,
-
         width: 25,
-
         height: 25,
-
         speed: 3
-
     });
-
 }
 
-
 function drawPowerUp(p) {
-
+    ctx.save();
     ctx.fillStyle = "#00ff66";
-
     ctx.shadowBlur = 20;
     ctx.shadowColor = "#00ff66";
-
     ctx.beginPath();
-
-    ctx.arc(
-        p.x + 12,
-        p.y + 12,
-        12,
-        0,
-        Math.PI * 2
-    );
-
+    ctx.arc(p.x + 12, p.y + 12, 12, 0, Math.PI * 2);
     ctx.fill();
-
-    ctx.shadowBlur = 0;
-
+    ctx.restore();
 }
 
 
@@ -796,87 +628,37 @@ function drawPowerUp(p) {
 // ======================================
 
 function createBoss() {
-
     boss = {
-
-        x: 300,
-
+        x: canvas.width / 2 - 100,
         y: 40,
-
         width: 200,
-
         height: 80,
-
         health: 50,
-
         maxHealth: 50,
-
         direction: 1
-
     };
-
     sound("boss");
-
     showMessage("👹 BOSS INCOMING!");
-
 }
 
-
 function drawBoss() {
-
     if (!boss) return;
-
+    ctx.save();
     ctx.fillStyle = "#a000ff";
-
     ctx.shadowBlur = 25;
     ctx.shadowColor = "#a000ff";
-
-    ctx.fillRect(
-        boss.x,
-        boss.y,
-        boss.width,
-        boss.height
-    );
+    ctx.fillRect(boss.x, boss.y, boss.width, boss.height);
 
     ctx.fillStyle = "red";
+    ctx.fillRect(boss.x + 25, boss.y + 25, 30, 20);
+    ctx.fillRect(boss.x + boss.width - 55, boss.y + 25, 30, 20);
+    ctx.restore();
 
-    ctx.fillRect(
-        boss.x + 25,
-        boss.y + 25,
-        30,
-        20
-    );
-
-    ctx.fillRect(
-        boss.x + boss.width - 55,
-        boss.y + 25,
-        30,
-        20
-    );
-
-    ctx.shadowBlur = 0;
-
-    // Boss health bar
-
+    // Health bar
     ctx.fillStyle = "red";
-
-    ctx.fillRect(
-        250,
-        10,
-        300,
-        15
-    );
-
+    ctx.fillRect(canvas.width / 2 - 150, 10, 300, 15);
     ctx.fillStyle = "lime";
-
-    ctx.fillRect(
-        250,
-        10,
-        300 *
-        (boss.health / boss.maxHealth),
-        15
-    );
-
+    ctx.fillRect(canvas.width / 2 - 150, 10, 300 * (boss.health / boss.maxHealth), 15);
 }
 
 
@@ -885,32 +667,15 @@ function drawBoss() {
 // ======================================
 
 function drawStars() {
-
     ctx.fillStyle = "white";
-
     stars.forEach(star => {
-
-        ctx.fillRect(
-            star.x,
-            star.y,
-            star.size,
-            star.size
-        );
-
+        ctx.fillRect(star.x, star.y, star.size, star.size);
         star.y += star.speed;
-
         if (star.y > canvas.height) {
-
             star.y = 0;
-
-            star.x =
-                Math.random() *
-                canvas.width;
-
+            star.x = Math.random() * canvas.width;
         }
-
     });
-
 }
 
 
@@ -919,19 +684,12 @@ function drawStars() {
 // ======================================
 
 function collision(a, b) {
-
     return (
-
         a.x < b.x + b.width &&
-
         a.x + a.width > b.x &&
-
         a.y < b.y + b.height &&
-
         a.y + a.height > b.y
-
     );
-
 }
 
 
@@ -940,373 +698,133 @@ function collision(a, b) {
 // ======================================
 
 function gameLoop() {
-
     if (!running) return;
 
-    ctx.clearRect(
-        0,
-        0,
-        canvas.width,
-        canvas.height
-    );
-
+    ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawStars();
 
-
-// --------------------------------------
-// PLAYER MOVEMENT (ALL 4 DIRECTIONS)
-// --------------------------------------
-
-    if (
-        keys["arrowleft"] ||
-        keys["a"]
-    ) {
-
-        player.x -= player.speed;
-
-    }
-
-    if (
-        keys["arrowright"] ||
-        keys["d"]
-    ) {
-
-        player.x += player.speed;
-
-    }
-
-    if (
-        keys["arrowup"] ||
-        keys["w"]
-    ) {
-
-        player.y -= player.speed;
-
-    }
-
-    if (
-        keys["arrowdown"] ||
-        keys["s"]
-    ) {
-
-        player.y += player.speed;
-
-    }
+    // Player Movement (All 4 directions)
+    if (keys["arrowleft"] || keys["a"]) player.x -= player.speed;
+    if (keys["arrowright"] || keys["d"]) player.x += player.speed;
+    if (keys["arrowup"] || keys["w"]) player.y -= player.speed;
+    if (keys["arrowdown"] || keys["s"]) player.y += player.speed;
 
     // Boundaries
-    if (player.x < 0)
-        player.x = 0;
+    if (player.x < 0) player.x = 0;
+    if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
+    if (player.y < 0) player.y = 0;
+    if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
 
-    if (
-        player.x + player.width >
-        canvas.width
-    ) {
-
-        player.x =
-            canvas.width -
-            player.width;
-
-    }
-
-    if (player.y < 0)
-        player.y = 0;
-
-    if (
-        player.y + player.height >
-        canvas.height
-    ) {
-
-        player.y =
-            canvas.height -
-            player.height;
-
-    }
-
-
-// --------------------------------------
-// SHOOT (HEAVY LASER GUN)
-// --------------------------------------
-
-    if (
-        keys[" "] ||
-        keys["space"]
-    ) {
-
+    // Shoot
+    if (keys[" "] || keys["space"]) {
         const now = Date.now();
-
-        if (now - lastShot > 180) {
-
+        if (now - lastShot > 160) {
             shoot();
-
             lastShot = now;
-
         }
-
     }
-
-
-// --------------------------------------
-// PLAYER
-// --------------------------------------
 
     drawPlayer();
 
-
-// --------------------------------------
-// BULLETS
-// --------------------------------------
-
+    // Bullets
     bullets.forEach((bullet, index) => {
-
         bullet.y -= bullet.speed;
-
         drawBullet(bullet);
-
-        if (bullet.y < -20) {
-
-            bullets.splice(index, 1);
-
-        }
-
+        if (bullet.y < -20) bullets.splice(index, 1);
     });
 
-
-// --------------------------------------
-// ENEMY SPAWN
-// --------------------------------------
-
+    // Enemy Spawn
     enemyTimer++;
-
-    if (
-        enemyTimer >
-        Math.max(20, 55 - level * 3)
-    ) {
-
+    if (enemyTimer > Math.max(20, 55 - level * 3)) {
         createEnemy();
-
         enemyTimer = 0;
-
     }
 
-
-// --------------------------------------
-// ENEMIES
-// --------------------------------------
-
+    // Enemies
     enemies.forEach((enemy, ei) => {
-
         enemy.y += enemy.speed;
-
         drawEnemy(enemy);
 
-
-        // Enemy hits player (ONLY when touching player)
-
-        if (
-            collision(player, enemy)
-        ) {
-
+        if (collision(player, enemy)) {
             enemies.splice(ei, 1);
-
             lives--;
-
             sound("hit");
-
             updateUI();
-
-        }
-
-
-        // Enemy leaves screen (Safe deletion without life penalty)
-
-        else if (
-            enemy.y >
-            canvas.height
-        ) {
-
+        } else if (enemy.y > canvas.height) {
             enemies.splice(ei, 1);
-
         }
-
-
-        // Bullet hits enemy (Fire Gun destruction)
 
         bullets.forEach((bullet, bi) => {
-
-            if (
-                collision(
-                    bullet,
-                    enemy
-                )
-            ) {
-
+            if (collision(bullet, enemy)) {
                 enemies.splice(ei, 1);
-
                 bullets.splice(bi, 1);
-
                 score += 10;
-
                 sound("explosion");
-
                 updateUI();
 
-
-                // Random power-up
-
-                if (
-                    Math.random() < .12
-                ) {
-
-                    createPowerUp(
-                        enemy.x,
-                        enemy.y
-                    );
-
+                if (Math.random() < .12) {
+                    createPowerUp(enemy.x, enemy.y);
                 }
-
             }
-
         });
-
     });
 
-
-// --------------------------------------
-// POWER-UPS
-// --------------------------------------
-
+    // Power-ups
     powerUps.forEach((p, pi) => {
-
         p.y += p.speed;
-
         drawPowerUp(p);
-
-        if (
-            collision(player, p)
-        ) {
-
+        if (collision(player, p)) {
             powerUps.splice(pi, 1);
-
             lives++;
-
             score += 25;
-
             sound("coin");
-
-            showMessage(
-                "🟢 POWER-UP! +1 LIFE"
-            );
-
+            showMessage("🟢 POWER-UP! +1 LIFE");
             updateUI();
-
         }
-
     });
 
-
-// --------------------------------------
-// LEVEL SYSTEM
-// --------------------------------------
-
-    const newLevel =
-        Math.floor(score / 100) + 1;
-
+    // Levels
+    const newLevel = Math.floor(score / 100) + 1;
     if (newLevel > level) {
-
         level = newLevel;
-
-        showMessage(
-            "⭐ LEVEL " + level
-        );
-
+        showMessage("⭐ LEVEL " + level);
         updateUI();
-
-        if (
-            level % 5 === 0 &&
-            !boss
-        ) {
-
+        if (level % 5 === 0 && !boss) {
             createBoss();
-
         }
-
     }
 
-
-// --------------------------------------
-// BOSS
-// --------------------------------------
-
+    // Boss
     if (boss) {
-
-        boss.x +=
-            boss.direction * 3;
-
-        if (
-            boss.x < 0 ||
-            boss.x + boss.width >
-            canvas.width
-        ) {
-
+        boss.x += boss.direction * 3;
+        if (boss.x < 0 || boss.x + boss.width > canvas.width) {
             boss.direction *= -1;
-
         }
-
         drawBoss();
 
-
         bullets.forEach((bullet, bi) => {
-
-            if (
-                collision(
-                    bullet,
-                    boss
-                )
-            ) {
-
+            if (collision(bullet, boss)) {
                 bullets.splice(bi, 1);
-
                 boss.health--;
-
                 sound("hit");
 
                 if (boss.health <= 0) {
-
                     score += 500;
-
                     sound("explosion");
-
-                    showMessage(
-                        "👑 BOSS DEFEATED! +500"
-                    );
-
+                    showMessage("👑 BOSS DEFEATED! +500");
                     boss = null;
-
                     updateUI();
-
                 }
-
             }
-
         });
-
     }
 
-
-// --------------------------------------
-// GAME OVER
-// --------------------------------------
-
     if (lives <= 0) {
-
         endGame();
-
         return;
-
     }
 
     requestAnimationFrame(gameLoop);
-
 }
 
 
@@ -1315,19 +833,10 @@ function gameLoop() {
 // ======================================
 
 function endGame() {
-
     running = false;
-
     sound("gameover");
-
-    document
-        .getElementById("finalScore")
-        .textContent = score;
-
-    document
-        .getElementById("gameOver")
-        .classList.remove("hidden");
-
+    document.getElementById("finalScore").textContent = score;
+    document.getElementById("gameOver").classList.remove("hidden");
 }
 
 </script>
