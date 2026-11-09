@@ -2,12 +2,13 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0">
-<title>🚀 Space Shooter</title>
+<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+<title>🚀 Space Shooter by Utkarsh</title>
 
 <style>
 * {
     box-sizing: border-box;
+    touch-action: manipulation;
 }
 
 body {
@@ -22,12 +23,13 @@ body {
 h1 {
     color: #00eaff;
     text-shadow: 0 0 20px #00eaff;
-    margin: 10px;
+    margin: 8px;
+    font-size: 24px;
 }
 
 #info {
-    font-size: 18px;
-    margin-bottom: 8px;
+    font-size: 16px;
+    margin-bottom: 5px;
 }
 
 canvas {
@@ -35,7 +37,9 @@ canvas {
     border: 3px solid #00eaff;
     box-shadow: 0 0 25px #00eaff;
     max-width: 95vw;
-    max-height: 78vh;
+    max-height: 65vh;
+    display: block;
+    margin: 0 auto;
 }
 
 .screen {
@@ -50,14 +54,20 @@ canvas {
 }
 
 .screen h2 {
-    font-size: 48px;
+    font-size: 38px;
     color: #00eaff;
     text-shadow: 0 0 25px #00eaff;
+    margin: 10px;
+}
+
+.screen p {
+    margin: 8px 0;
+    font-size: 16px;
 }
 
 button {
-    padding: 15px 35px;
-    font-size: 20px;
+    padding: 12px 30px;
+    font-size: 18px;
     font-weight: bold;
     border: 0;
     border-radius: 10px;
@@ -65,6 +75,7 @@ button {
     background: #00eaff;
     color: #001018;
     box-shadow: 0 0 20px #00eaff;
+    margin-top: 10px;
 }
 
 button:hover {
@@ -82,21 +93,66 @@ button:hover {
 
 #message {
     position: fixed;
-    top: 80px;
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 28px;
+    font-size: 24px;
     font-weight: bold;
     color: yellow;
     text-shadow: 0 0 15px yellow;
     pointer-events: none;
+}
+
+/* MOBILE TOUCH CONTROLS */
+#controls {
+    display: flex;
+    justify-content: space-between;
+    width: 95vw;
+    max-width: 800px;
+    margin: 10px auto 0 auto;
+    padding: 0 10px;
+}
+
+.control-group {
+    display: flex;
+    gap: 15px;
+}
+
+.mob-btn {
+    width: 70px;
+    height: 60px;
+    font-size: 22px;
+    background: rgba(0, 234, 255, 0.2);
+    border: 2px solid #00eaff;
+    color: #00eaff;
+    border-radius: 12px;
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    user-select: none;
+    -webkit-user-select: none;
+}
+
+.mob-btn:active {
+    background: rgba(0, 234, 255, 0.6);
+}
+
+#shootBtn {
+    background: rgba(255, 49, 88, 0.2);
+    border: 2px solid #ff3158;
+    color: #ff3158;
+    width: 90px;
+}
+
+#shootBtn:active {
+    background: rgba(255, 49, 88, 0.6);
 }
 </style>
 </head>
 
 <body>
 
-<h1>🚀 SPACE SHOOTER</h1>
+<h1>🚀 SPACE SHOOTER - BY UTKARSH</h1>
 
 <div id="info">
     Score: <span id="score">0</span>
@@ -106,34 +162,34 @@ button:hover {
     ⭐ Level: <span id="level">1</span>
 </div>
 
-<canvas id="game" width="800" height="550"></canvas>
+<canvas id="game" width="800" height="500"></canvas>
+
+<!-- MOBILE CONTROLS -->
+<div id="controls">
+    <div class="control-group">
+        <div class="mob-btn" id="leftBtn">⬅️</div>
+        <div class="mob-btn" id="rightBtn">➡️</div>
+    </div>
+    <div class="mob-btn" id="shootBtn">🔥 SHOOT</div>
+</div>
 
 <div id="message"></div>
 
 <!-- START SCREEN -->
 <div id="startScreen" class="screen">
-
     <h2>🚀 SPACE SHOOTER</h2>
-
-    <p>⬅️ ➡️ / A D = Move</p>
-    <p>SPACE = Shoot Fire Gun</p>
-
+    <p><b>Developer: UTKARSH</b></p>
+    <p>⬅️ ➡️ / A D = Move | SPACE = Shoot</p>
+    <p>📱 Mobile Touch Buttons Added Below!</p>
     <button onclick="startGame()">START GAME</button>
-
 </div>
 
 <!-- GAME OVER -->
 <div id="gameOver" class="screen hidden">
-
     <h2>💥 GAME OVER</h2>
-
-    <p>
-        Your Score:
-        <strong id="finalScore">0</strong>
-    </p>
-
+    <p>Player: <strong>Utkarsh's Game</strong></p>
+    <p>Your Score: <strong id="finalScore">0</strong></p>
     <button onclick="restartGame()">PLAY AGAIN</button>
-
 </div>
 
 <script>
@@ -332,7 +388,7 @@ let boss = null;
 const player = {
 
     x: 370,
-    y: 480,
+    y: 430,
 
     width: 60,
     height: 45,
@@ -343,7 +399,7 @@ const player = {
 
 
 // ======================================
-// KEYBOARD
+// KEYBOARD & TOUCH CONTROLS
 // ======================================
 
 document.addEventListener("keydown", e => {
@@ -361,6 +417,26 @@ document.addEventListener("keyup", e => {
     keys[e.key.toLowerCase()] = false;
 
 });
+
+// Mobile button listeners
+const leftBtn = document.getElementById("leftBtn");
+const rightBtn = document.getElementById("rightBtn");
+const shootBtn = document.getElementById("shootBtn");
+
+leftBtn.addEventListener("touchstart", () => { keys["arrowleft"] = true; });
+leftBtn.addEventListener("touchend", () => { keys["arrowleft"] = false; });
+leftBtn.addEventListener("mousedown", () => { keys["arrowleft"] = true; });
+leftBtn.addEventListener("mouseup", () => { keys["arrowleft"] = false; });
+
+rightBtn.addEventListener("touchstart", () => { keys["arrowright"] = true; });
+rightBtn.addEventListener("touchend", () => { keys["arrowright"] = false; });
+rightBtn.addEventListener("mousedown", () => { keys["arrowright"] = true; });
+rightBtn.addEventListener("mouseup", () => { keys["arrowright"] = false; });
+
+shootBtn.addEventListener("touchstart", () => { keys[" "] = true; });
+shootBtn.addEventListener("touchend", () => { keys[" "] = false; });
+shootBtn.addEventListener("mousedown", () => { keys[" "] = true; });
+shootBtn.addEventListener("mouseup", () => { keys[" "] = false; });
 
 
 // ======================================
@@ -509,6 +585,13 @@ function drawPlayer() {
     ctx.closePath();
 
     ctx.fill();
+
+    // Draw Name tag on player
+    ctx.fillStyle = "#ffffff";
+    ctx.font = "11px Arial";
+    ctx.shadowBlur = 5;
+    ctx.shadowColor = "yellow";
+    ctx.fillText("UTKARSH", player.x + 5, player.y - 8);
 
     ctx.restore();
 
