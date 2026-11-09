@@ -1,0 +1,1213 @@
+#include <iostream>
+using namespace std;
+int main(){
+    int n,i,j;
+    cin>>n;
+    for(i=0;i==n;i++)
+    for(j=0;j<=i;j++)
+    cout<<"*";
+
+}
+```html
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚀 Space Shooter</title>
+
+<style>
+* {
+    box-sizing: border-box;
+}
+
+body {
+    margin: 0;
+    background: #03030d;
+    color: white;
+    font-family: Arial, sans-serif;
+    text-align: center;
+    overflow: hidden;
+}
+
+h1 {
+    color: #00eaff;
+    text-shadow: 0 0 20px #00eaff;
+    margin: 10px;
+}
+
+#info {
+    font-size: 18px;
+    margin-bottom: 8px;
+}
+
+canvas {
+    background: #050520;
+    border: 3px solid #00eaff;
+    box-shadow: 0 0 25px #00eaff;
+    max-width: 95vw;
+    max-height: 78vh;
+}
+
+.screen {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,.92);
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    flex-direction: column;
+    z-index: 10;
+}
+
+.screen h2 {
+    font-size: 48px;
+    color: #00eaff;
+    text-shadow: 0 0 25px #00eaff;
+}
+
+button {
+    padding: 15px 35px;
+    font-size: 20px;
+    font-weight: bold;
+    border: 0;
+    border-radius: 10px;
+    cursor: pointer;
+    background: #00eaff;
+    color: #001018;
+    box-shadow: 0 0 20px #00eaff;
+}
+
+button:hover {
+    transform: scale(1.08);
+}
+
+.hidden {
+    display: none !important;
+}
+
+#gameOver h2 {
+    color: #ff3158;
+    text-shadow: 0 0 20px red;
+}
+
+#message {
+    position: fixed;
+    top: 80px;
+    left: 50%;
+    transform: translateX(-50%);
+    font-size: 28px;
+    font-weight: bold;
+    color: yellow;
+    text-shadow: 0 0 15px yellow;
+    pointer-events: none;
+}
+</style>
+</head>
+
+<body>
+
+<h1>🚀 SPACE SHOOTER</h1>
+
+<div id="info">
+    Score: <span id="score">0</span>
+    &nbsp; | &nbsp;
+    ❤️ Lives: <span id="lives">3</span>
+    &nbsp; | &nbsp;
+    ⭐ Level: <span id="level">1</span>
+</div>
+
+<canvas id="game" width="800" height="550"></canvas>
+
+<div id="message"></div>
+
+<!-- START SCREEN -->
+<div id="startScreen" class="screen">
+
+    <h2>🚀 SPACE SHOOTER</h2>
+
+    <p>⬅️ ➡️ / A D = Move</p>
+    <p>SPACE = Shoot</p>
+
+    <button onclick="startGame()">START GAME</button>
+
+</div>
+
+<!-- GAME OVER -->
+<div id="gameOver" class="screen hidden">
+
+    <h2>💥 GAME OVER</h2>
+
+    <p>
+        Your Score:
+        <strong id="finalScore">0</strong>
+    </p>
+
+    <button onclick="restartGame()">PLAY AGAIN</button>
+
+</div>
+
+<script>
+
+// ======================================
+// CANVAS
+// ======================================
+
+const canvas = document.getElementById("game");
+const ctx = canvas.getContext("2d");
+
+
+// ======================================
+// AUDIO SYSTEM
+// ======================================
+
+const AudioContext =
+    window.AudioContext || window.webkitAudioContext;
+
+const audioCtx = new AudioContext();
+
+function sound(type) {
+
+    if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+    }
+
+    const osc = audioCtx.createOscillator();
+    const gain = audioCtx.createGain();
+
+    osc.connect(gain);
+    gain.connect(audioCtx.destination);
+
+    const now = audioCtx.currentTime;
+
+    if (type === "shoot") {
+
+        osc.type = "square";
+        osc.frequency.setValueAtTime(900, now);
+        osc.frequency.exponentialRampToValueAtTime(
+            180,
+            now + .12
+        );
+
+        gain.gain.setValueAtTime(.12, now);
+        gain.gain.exponentialRampToValueAtTime(
+            .01,
+            now + .12
+        );
+
+        osc.start();
+        osc.stop(now + .12);
+    }
+
+    if (type === "explosion") {
+
+        osc.type = "sawtooth";
+        osc.frequency.setValueAtTime(180, now);
+        osc.frequency.exponentialRampToValueAtTime(
+            35,
+            now + .35
+        );
+
+        gain.gain.setValueAtTime(.25, now);
+        gain.gain.exponentialRampToValueAtTime(
+            .01,
+            now + .35
+        );
+
+        osc.start();
+        osc.stop(now + .35);
+    }
+
+    if (type === "hit") {
+
+        osc.type = "triangle";
+        osc.frequency.setValueAtTime(350, now);
+        osc.frequency.exponentialRampToValueAtTime(
+            70,
+            now + .3
+        );
+
+        gain.gain.setValueAtTime(.2, now);
+        gain.gain.exponentialRampToValueAtTime(
+            .01,
+            now + .3
+        );
+
+        osc.start();
+        osc.stop(now + .3);
+    }
+
+    if (type === "coin") {
+
+        osc.type = "sine";
+
+        osc.frequency.setValueAtTime(
+            700,
+            now
+        );
+
+        osc.frequency.setValueAtTime(
+            1100,
+            now + .08
+        );
+
+        gain.gain.setValueAtTime(.2, now);
+
+        gain.gain.exponentialRampToValueAtTime(
+            .01,
+            now + .2
+        );
+
+        osc.start();
+        osc.stop(now + .2);
+    }
+
+    if (type === "boss") {
+
+        osc.type = "sawtooth";
+
+        osc.frequency.setValueAtTime(
+            100,
+            now
+        );
+
+        osc.frequency.exponentialRampToValueAtTime(
+            40,
+            now + .8
+        );
+
+        gain.gain.setValueAtTime(.3, now);
+
+        gain.gain.exponentialRampToValueAtTime(
+            .01,
+            now + .8
+        );
+
+        osc.start();
+        osc.stop(now + .8);
+    }
+
+    if (type === "gameover") {
+
+        osc.type = "sine";
+
+        osc.frequency.setValueAtTime(
+            300,
+            now
+        );
+
+        osc.frequency.exponentialRampToValueAtTime(
+            50,
+            now + 1
+        );
+
+        gain.gain.setValueAtTime(.3, now);
+
+        gain.gain.exponentialRampToValueAtTime(
+            .01,
+            now + 1
+        );
+
+        osc.start();
+        osc.stop(now + 1);
+    }
+}
+
+
+// ======================================
+// GAME VARIABLES
+// ======================================
+
+let score = 0;
+let lives = 3;
+let level = 1;
+
+let running = false;
+
+let bullets = [];
+let enemies = [];
+let powerUps = [];
+let enemyBullets = [];
+
+let keys = {};
+
+let lastShot = 0;
+let enemyTimer = 0;
+
+let boss = null;
+
+
+// ======================================
+// PLAYER
+// ======================================
+
+const player = {
+
+    x: 370,
+    y: 480,
+
+    width: 60,
+    height: 45,
+
+    speed: 7
+
+};
+
+
+// ======================================
+// KEYBOARD
+// ======================================
+
+document.addEventListener("keydown", e => {
+
+    keys[e.key.toLowerCase()] = true;
+
+    if (e.code === "Space") {
+        e.preventDefault();
+    }
+
+});
+
+document.addEventListener("keyup", e => {
+
+    keys[e.key.toLowerCase()] = false;
+
+});
+
+
+// ======================================
+// STARS
+// ======================================
+
+let stars = [];
+
+for (let i = 0; i < 120; i++) {
+
+    stars.push({
+
+        x: Math.random() * canvas.width,
+
+        y: Math.random() * canvas.height,
+
+        size: Math.random() * 3,
+
+        speed: Math.random() * 2 + .5
+
+    });
+
+}
+
+
+// ======================================
+// START GAME
+// ======================================
+
+function startGame() {
+
+    if (audioCtx.state === "suspended") {
+        audioCtx.resume();
+    }
+
+    document
+        .getElementById("startScreen")
+        .classList.add("hidden");
+
+    score = 0;
+    lives = 3;
+    level = 1;
+
+    bullets = [];
+    enemies = [];
+    powerUps = [];
+    enemyBullets = [];
+
+    boss = null;
+
+    player.x = canvas.width / 2 - 30;
+
+    running = true;
+
+    updateUI();
+
+    gameLoop();
+
+}
+
+
+// ======================================
+// RESTART
+// ======================================
+
+function restartGame() {
+
+    document
+        .getElementById("gameOver")
+        .classList.add("hidden");
+
+    startGame();
+
+}
+
+
+// ======================================
+// UI
+// ======================================
+
+function updateUI() {
+
+    document.getElementById("score").textContent = score;
+
+    document.getElementById("lives").textContent = lives;
+
+    document.getElementById("level").textContent = level;
+
+}
+
+
+// ======================================
+// MESSAGE
+// ======================================
+
+function showMessage(text) {
+
+    const msg =
+        document.getElementById("message");
+
+    msg.textContent = text;
+
+    setTimeout(() => {
+
+        msg.textContent = "";
+
+    }, 1500);
+
+}
+
+
+// ======================================
+// DRAW PLAYER
+// ======================================
+
+function drawPlayer() {
+
+    ctx.save();
+
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "#00eaff";
+
+    ctx.fillStyle = "#00eaff";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        player.x + player.width / 2,
+        player.y
+    );
+
+    ctx.lineTo(
+        player.x,
+        player.y + player.height
+    );
+
+    ctx.lineTo(
+        player.x + player.width / 2,
+        player.y + player.height - 12
+    );
+
+    ctx.lineTo(
+        player.x + player.width,
+        player.y + player.height
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+    ctx.restore();
+
+}
+
+
+// ======================================
+// SHOOT
+// ======================================
+
+function shoot() {
+
+    bullets.push({
+
+        x: player.x + player.width / 2 - 3,
+
+        y: player.y,
+
+        width: 6,
+
+        height: 15,
+
+        speed: 11
+
+    });
+
+    sound("shoot");
+
+}
+
+
+// ======================================
+// ENEMY
+// ======================================
+
+function createEnemy() {
+
+    enemies.push({
+
+        x: Math.random() *
+            (canvas.width - 45),
+
+        y: -50,
+
+        width: 45,
+
+        height: 40,
+
+        speed:
+            2 +
+            Math.random() * 2 +
+            level * .2
+
+    });
+
+}
+
+
+// ======================================
+// DRAW ENEMY
+// ======================================
+
+function drawEnemy(enemy) {
+
+    ctx.save();
+
+    ctx.fillStyle = "#ff3158";
+
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "#ff3158";
+
+    ctx.beginPath();
+
+    ctx.moveTo(
+        enemy.x + enemy.width / 2,
+        enemy.y
+    );
+
+    ctx.lineTo(
+        enemy.x + enemy.width,
+        enemy.y + enemy.height
+    );
+
+    ctx.lineTo(
+        enemy.x + enemy.width / 2,
+        enemy.y + enemy.height - 10
+    );
+
+    ctx.lineTo(
+        enemy.x,
+        enemy.y + enemy.height
+    );
+
+    ctx.closePath();
+
+    ctx.fill();
+
+    ctx.restore();
+
+}
+
+
+// ======================================
+// BULLET
+// ======================================
+
+function drawBullet(bullet) {
+
+    ctx.fillStyle = "yellow";
+
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "yellow";
+
+    ctx.fillRect(
+        bullet.x,
+        bullet.y,
+        bullet.width,
+        bullet.height
+    );
+
+    ctx.shadowBlur = 0;
+
+}
+
+
+// ======================================
+// POWER-UP
+// ======================================
+
+function createPowerUp(x, y) {
+
+    powerUps.push({
+
+        x: x,
+
+        y: y,
+
+        width: 25,
+
+        height: 25,
+
+        speed: 3
+
+    });
+
+}
+
+
+function drawPowerUp(p) {
+
+    ctx.fillStyle = "#00ff66";
+
+    ctx.shadowBlur = 20;
+    ctx.shadowColor = "#00ff66";
+
+    ctx.beginPath();
+
+    ctx.arc(
+        p.x + 12,
+        p.y + 12,
+        12,
+        0,
+        Math.PI * 2
+    );
+
+    ctx.fill();
+
+    ctx.shadowBlur = 0;
+
+}
+
+
+// ======================================
+// BOSS
+// ======================================
+
+function createBoss() {
+
+    boss = {
+
+        x: 300,
+
+        y: 40,
+
+        width: 200,
+
+        height: 80,
+
+        health: 50,
+
+        maxHealth: 50,
+
+        direction: 1
+
+    };
+
+    sound("boss");
+
+    showMessage("👹 BOSS INCOMING!");
+
+}
+
+
+function drawBoss() {
+
+    if (!boss) return;
+
+    ctx.fillStyle = "#a000ff";
+
+    ctx.shadowBlur = 25;
+    ctx.shadowColor = "#a000ff";
+
+    ctx.fillRect(
+        boss.x,
+        boss.y,
+        boss.width,
+        boss.height
+    );
+
+    ctx.fillStyle = "red";
+
+    ctx.fillRect(
+        boss.x + 25,
+        boss.y + 25,
+        30,
+        20
+    );
+
+    ctx.fillRect(
+        boss.x + boss.width - 55,
+        boss.y + 25,
+        30,
+        20
+    );
+
+    ctx.shadowBlur = 0;
+
+    // Boss health bar
+
+    ctx.fillStyle = "red";
+
+    ctx.fillRect(
+        250,
+        10,
+        300,
+        15
+    );
+
+    ctx.fillStyle = "lime";
+
+    ctx.fillRect(
+        250,
+        10,
+        300 *
+        (boss.health / boss.maxHealth),
+        15
+    );
+
+}
+
+
+// ======================================
+// STARS
+// ======================================
+
+function drawStars() {
+
+    ctx.fillStyle = "white";
+
+    stars.forEach(star => {
+
+        ctx.fillRect(
+            star.x,
+            star.y,
+            star.size,
+            star.size
+        );
+
+        star.y += star.speed;
+
+        if (star.y > canvas.height) {
+
+            star.y = 0;
+
+            star.x =
+                Math.random() *
+                canvas.width;
+
+        }
+
+    });
+
+}
+
+
+// ======================================
+// COLLISION
+// ======================================
+
+function collision(a, b) {
+
+    return (
+
+        a.x < b.x + b.width &&
+
+        a.x + a.width > b.x &&
+
+        a.y < b.y + b.height &&
+
+        a.y + a.height > b.y
+
+    );
+
+}
+
+
+// ======================================
+// GAME LOOP
+// ======================================
+
+function gameLoop() {
+
+    if (!running) return;
+
+    ctx.clearRect(
+        0,
+        0,
+        canvas.width,
+        canvas.height
+    );
+
+    drawStars();
+
+
+// --------------------------------------
+// PLAYER MOVEMENT
+// --------------------------------------
+
+    if (
+        keys["arrowleft"] ||
+        keys["a"]
+    ) {
+
+        player.x -= player.speed;
+
+    }
+
+    if (
+        keys["arrowright"] ||
+        keys["d"]
+    ) {
+
+        player.x += player.speed;
+
+    }
+
+    if (player.x < 0)
+        player.x = 0;
+
+    if (
+        player.x + player.width >
+        canvas.width
+    ) {
+
+        player.x =
+            canvas.width -
+            player.width;
+
+    }
+
+
+// --------------------------------------
+// SHOOT
+// --------------------------------------
+
+    if (
+        keys[" "] ||
+        keys["space"]
+    ) {
+
+        const now = Date.now();
+
+        if (now - lastShot > 220) {
+
+            shoot();
+
+            lastShot = now;
+
+        }
+
+    }
+
+
+// --------------------------------------
+// PLAYER
+// --------------------------------------
+
+    drawPlayer();
+
+
+// --------------------------------------
+// BULLETS
+// --------------------------------------
+
+    bullets.forEach((bullet, index) => {
+
+        bullet.y -= bullet.speed;
+
+        drawBullet(bullet);
+
+        if (bullet.y < -20) {
+
+            bullets.splice(index, 1);
+
+        }
+
+    });
+
+
+// --------------------------------------
+// ENEMY SPAWN
+// --------------------------------------
+
+    enemyTimer++;
+
+    if (
+        enemyTimer >
+        Math.max(20, 55 - level * 3)
+    ) {
+
+        createEnemy();
+
+        enemyTimer = 0;
+
+    }
+
+
+// --------------------------------------
+// ENEMIES
+// --------------------------------------
+
+    enemies.forEach((enemy, ei) => {
+
+        enemy.y += enemy.speed;
+
+        drawEnemy(enemy);
+
+
+        // Enemy hits player
+
+        if (
+            collision(player, enemy)
+        ) {
+
+            enemies.splice(ei, 1);
+
+            lives--;
+
+            sound("hit");
+
+            updateUI();
+
+        }
+
+
+        // Enemy leaves screen
+
+        if (
+            enemy.y >
+            canvas.height
+        ) {
+
+            enemies.splice(ei, 1);
+
+            lives--;
+
+            sound("hit");
+
+            updateUI();
+
+        }
+
+
+        // Bullet collision
+
+        bullets.forEach((bullet, bi) => {
+
+            if (
+                collision(
+                    bullet,
+                    enemy
+                )
+            ) {
+
+                enemies.splice(ei, 1);
+
+                bullets.splice(bi, 1);
+
+                score += 10;
+
+                sound("explosion");
+
+                updateUI();
+
+
+                // Random power-up
+
+                if (
+                    Math.random() < .12
+                ) {
+
+                    createPowerUp(
+                        enemy.x,
+                        enemy.y
+                    );
+
+                }
+
+            }
+
+        });
+
+    });
+
+
+// --------------------------------------
+// POWER-UPS
+// --------------------------------------
+
+    powerUps.forEach((p, pi) => {
+
+        p.y += p.speed;
+
+        drawPowerUp(p);
+
+        if (
+            collision(player, p)
+        ) {
+
+            powerUps.splice(pi, 1);
+
+            lives++;
+
+            score += 25;
+
+            sound("coin");
+
+            showMessage(
+                "🟢 POWER-UP! +1 LIFE"
+            );
+
+            updateUI();
+
+        }
+
+    });
+
+
+// --------------------------------------
+// LEVEL SYSTEM
+// --------------------------------------
+
+    const newLevel =
+        Math.floor(score / 100) + 1;
+
+    if (newLevel > level) {
+
+        level = newLevel;
+
+        showMessage(
+            "⭐ LEVEL " + level
+        );
+
+        updateUI();
+
+        if (
+            level % 5 === 0 &&
+            !boss
+        ) {
+
+            createBoss();
+
+        }
+
+    }
+
+
+// --------------------------------------
+// BOSS
+// --------------------------------------
+
+    if (boss) {
+
+        boss.x +=
+            boss.direction * 3;
+
+        if (
+            boss.x < 0 ||
+            boss.x + boss.width >
+            canvas.width
+        ) {
+
+            boss.direction *= -1;
+
+        }
+
+        drawBoss();
+
+
+        bullets.forEach((bullet, bi) => {
+
+            if (
+                collision(
+                    bullet,
+                    boss
+                )
+            ) {
+
+                bullets.splice(bi, 1);
+
+                boss.health--;
+
+                sound("hit");
+
+                if (boss.health <= 0) {
+
+                    score += 500;
+
+                    sound("explosion");
+
+                    showMessage(
+                        "👑 BOSS DEFEATED! +500"
+                    );
+
+                    boss = null;
+
+                    updateUI();
+
+                }
+
+            }
+
+        });
+
+    }
+
+
+// --------------------------------------
+// GAME OVER
+// --------------------------------------
+
+    if (lives <= 0) {
+
+        endGame();
+
+        return;
+
+    }
+
+    requestAnimationFrame(gameLoop);
+
+}
+
+
+// ======================================
+// END GAME
+// ======================================
+
+function endGame() {
+
+    running = false;
+
+    sound("gameover");
+
+    document
+        .getElementById("finalScore")
+        .textContent = score;
+
+    document
+        .getElementById("gameOver")
+        .classList.remove("hidden");
+
+}
+
+</script>
+
+</body>
+</html>
+```
