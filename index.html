@@ -35,13 +35,13 @@ body, html {
     align-items: center;
     width: 100vw;
     height: 100vh;
-    padding: 5px;
+    padding: 4px;
 }
 
 h1 {
     color: #00eaff;
     text-shadow: 0 0 15px #00eaff;
-    font-size: 18px;
+    font-size: 17px;
     margin: 2px 0;
 }
 
@@ -53,10 +53,10 @@ h1 {
 canvas {
     background: #050520;
     border: 2px solid #00eaff;
-    box-shadow: 0 0 25px #00eaff;
+    box-shadow: 0 0 20px #00eaff;
     width: 100%;
     flex-grow: 1;
-    max-height: 72vh;
+    max-height: 68vh;
     display: block;
 }
 
@@ -72,7 +72,7 @@ canvas {
 }
 
 .screen h2 {
-    font-size: 34px;
+    font-size: 32px;
     color: #00eaff;
     text-shadow: 0 0 20px #00eaff;
     margin: 10px;
@@ -111,10 +111,10 @@ button:hover {
 
 #message {
     position: fixed;
-    top: 50px;
+    top: 45px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 20px;
+    font-size: 18px;
     font-weight: bold;
     color: yellow;
     text-shadow: 0 0 15px yellow;
@@ -122,27 +122,27 @@ button:hover {
     z-index: 5;
 }
 
-/* MOBILE TOUCH CONTROLS */
+/* MOBILE TOUCH CONTROLS (FULL D-PAD) */
 #controls {
     display: flex;
-    justify-content: space-between;
+    justify-content: space-around;
     align-items: center;
     width: 100%;
     max-width: 800px;
-    padding: 5px 10px;
+    padding: 4px;
 }
 
 .dpad {
     display: grid;
-    grid-template-columns: 50px 50px 50px;
-    grid-template-rows: 40px 40px;
-    gap: 3px;
+    grid-template-columns: 60px 60px 60px;
+    grid-template-rows: 45px 45px;
+    gap: 4px;
     justify-content: center;
 }
 
 .mob-btn {
-    font-size: 16px;
-    background: rgba(0, 234, 255, 0.2);
+    font-size: 18px;
+    background: rgba(0, 234, 255, 0.25);
     border: 2px solid #00eaff;
     color: #00eaff;
     border-radius: 8px;
@@ -154,7 +154,7 @@ button:hover {
 }
 
 .mob-btn:active {
-    background: rgba(0, 234, 255, 0.6);
+    background: rgba(0, 234, 255, 0.7);
 }
 
 #upBtn { grid-column: 2; grid-row: 1; }
@@ -166,9 +166,9 @@ button:hover {
     background: rgba(255, 49, 88, 0.3);
     border: 2px solid #ff3158;
     color: #ff3158;
-    width: 90px;
-    height: 60px;
-    font-size: 16px;
+    width: 110px;
+    height: 75px;
+    font-size: 18px;
     font-weight: bold;
     border-radius: 12px;
     display: flex;
@@ -200,7 +200,7 @@ button:hover {
 
     <canvas id="game"></canvas>
 
-    <!-- MOBILE CONTROLS -->
+    <!-- MOBILE CONTROLS (ALL 4 BUTTONS) -->
     <div id="controls">
         <div class="dpad">
             <div class="mob-btn" id="upBtn">⬆️</div>
@@ -241,7 +241,7 @@ const ctx = canvas.getContext("2d");
 
 function resizeCanvas() {
     canvas.width = window.innerWidth > 800 ? 800 : window.innerWidth - 10;
-    canvas.height = window.innerHeight * 0.65;
+    canvas.height = window.innerHeight * 0.62;
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
@@ -271,7 +271,6 @@ function sound(type) {
     const now = audioCtx.currentTime;
 
     if (type === "shoot") {
-        // Real heavy laser sound
         osc.type = "sawtooth";
         osc.frequency.setValueAtTime(1400, now);
         osc.frequency.exponentialRampToValueAtTime(
@@ -392,14 +391,14 @@ let boss = null;
 const player = {
     x: 370,
     y: 370,
-    width: 60,
-    height: 45,
+    width: 50,
+    height: 40,
     speed: 7
 };
 
 
 // ======================================
-// CONTROLS
+// CONTROLS (KEYBOARD + TOUCH D-PAD)
 // ======================================
 
 document.addEventListener("keydown", e => {
@@ -481,8 +480,8 @@ function startGame() {
     powerUps = [];
     boss = null;
 
-    player.x = canvas.width / 2 - 30;
-    player.y = canvas.height - 80;
+    player.x = canvas.width / 2 - 25;
+    player.y = canvas.height - 70;
 
     running = true;
     updateUI();
@@ -532,7 +531,7 @@ function drawPlayer() {
     ctx.beginPath();
     ctx.moveTo(player.x + player.width / 2, player.y);
     ctx.lineTo(player.x, player.y + player.height);
-    ctx.lineTo(player.x + player.width / 2, player.y + player.height - 12);
+    ctx.lineTo(player.x + player.width / 2, player.y + player.height - 10);
     ctx.lineTo(player.x + player.width, player.y + player.height);
     ctx.closePath();
     ctx.fill();
@@ -546,11 +545,11 @@ function drawPlayer() {
 
 function shoot() {
     bullets.push({
-        x: player.x + player.width / 2 - 5,
+        x: player.x + player.width / 2 - 4,
         y: player.y,
-        width: 10,
-        height: 28,
-        speed: 16
+        width: 8,
+        height: 22,
+        speed: 15
     });
 
     sound("shoot");
@@ -572,10 +571,10 @@ function drawBullet(bullet) {
 
 function createEnemy() {
     enemies.push({
-        x: Math.random() * (canvas.width - 45),
+        x: Math.random() * (canvas.width - 40),
         y: -50,
-        width: 45,
-        height: 40,
+        width: 40,
+        height: 35,
         speed: 2 + Math.random() * 2 + level * .2
     });
 }
