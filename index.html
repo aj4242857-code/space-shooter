@@ -1,15 +1,4 @@
-#include <iostream>
-using namespace std;
-int main(){
-    int n,i,j;
-    cin>>n;
-    for(i=0;i==n;i++)
-    for(j=0;j<=i;j++)
-    cout<<"*";
-
-}
-```html
-<!DOCTYPE html>
+ <!DOCTYPE html>
 <html lang="en">
 <head>
 <meta charset="UTF-8">
@@ -127,7 +116,7 @@ button:hover {
     <h2>🚀 SPACE SHOOTER</h2>
 
     <p>⬅️ ➡️ / A D = Move</p>
-    <p>SPACE = Shoot</p>
+    <p>SPACE = Shoot Fire Gun</p>
 
     <button onclick="startGame()">START GAME</button>
 
@@ -327,7 +316,6 @@ let running = false;
 let bullets = [];
 let enemies = [];
 let powerUps = [];
-let enemyBullets = [];
 
 let keys = {};
 
@@ -419,7 +407,6 @@ function startGame() {
     bullets = [];
     enemies = [];
     powerUps = [];
-    enemyBullets = [];
 
     boss = null;
 
@@ -529,7 +516,7 @@ function drawPlayer() {
 
 
 // ======================================
-// SHOOT
+// SHOOT (FIRE GUN)
 // ======================================
 
 function shoot() {
@@ -894,7 +881,7 @@ function gameLoop() {
 
 
 // --------------------------------------
-// SHOOT
+// SHOOT (FIRE GUN)
 // --------------------------------------
 
     if (
@@ -970,7 +957,7 @@ function gameLoop() {
         drawEnemy(enemy);
 
 
-        // Enemy hits player
+        // Enemy hits player (ONLY when touching player)
 
         if (
             collision(player, enemy)
@@ -987,25 +974,19 @@ function gameLoop() {
         }
 
 
-        // Enemy leaves screen
+        // Enemy leaves screen (Safe deletion without life penalty)
 
-        if (
+        else if (
             enemy.y >
             canvas.height
         ) {
 
             enemies.splice(ei, 1);
 
-            lives--;
-
-            sound("hit");
-
-            updateUI();
-
         }
 
 
-        // Bullet collision
+        // Bullet hits enemy (Fire Gun destruction)
 
         bullets.forEach((bullet, bi) => {
 
@@ -1210,4 +1191,3 @@ function endGame() {
 
 </body>
 </html>
-```
