@@ -2,25 +2,16 @@
 <html lang="en">
 <head>
 <meta charset="UTF-8">
-<meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🚀 Space Shooter - Utkarsh</title>
-
-<!-- GOOGLE SEO META TAGS -->
-<meta name="description" content="Play Space Shooter online game created by Utkarsh. Enjoy shooting enemies, laser guns, and defeating bosses!">
-<meta name="keywords" content="space shooter game, Utkarsh game, html5 space game, play online space shooter">
-<meta name="author" content="Utkarsh">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>🚀 Space Shooter by Utkarsh</title>
 
 <style>
 * {
     box-sizing: border-box;
-    touch-action: manipulation;
-    margin: 0;
-    padding: 0;
 }
 
-body, html {
-    width: 100%;
-    height: 100%;
+body {
+    margin: 0;
     background: #03030d;
     color: white;
     font-family: Arial, sans-serif;
@@ -28,37 +19,26 @@ body, html {
     overflow: hidden;
 }
 
-#game-container {
-    display: flex;
-    flex-direction: column;
-    justify-content: space-between;
-    align-items: center;
-    width: 100vw;
-    height: 100vh;
-    padding: 5px;
-    background: #03030d;
-}
-
 h1 {
     color: #00eaff;
-    text-shadow: 0 0 15px #00eaff;
-    font-size: 17px;
-    margin: 2px 0;
+    text-shadow: 0 0 20px #00eaff;
+    margin: 8px;
+    font-size: 22px;
 }
 
 #info {
-    font-size: 13px;
-    margin-bottom: 2px;
+    font-size: 16px;
+    margin-bottom: 5px;
 }
 
 canvas {
     background: #050520;
-    border: 2px solid #00eaff;
-    box-shadow: 0 0 20px #00eaff;
-    width: 100%;
-    flex-grow: 1;
-    max-height: 65vh;
+    border: 3px solid #00eaff;
+    box-shadow: 0 0 25px #00eaff;
+    max-width: 95vw;
+    max-height: 55vh;
     display: block;
+    margin: 0 auto;
 }
 
 .screen {
@@ -73,15 +53,15 @@ canvas {
 }
 
 .screen h2 {
-    font-size: 34px;
+    font-size: 38px;
     color: #00eaff;
-    text-shadow: 0 0 20px #00eaff;
+    text-shadow: 0 0 25px #00eaff;
     margin: 10px;
 }
 
 .screen p {
-    margin: 5px 0;
-    font-size: 14px;
+    margin: 8px 0;
+    font-size: 16px;
 }
 
 button {
@@ -112,70 +92,38 @@ button:hover {
 
 #message {
     position: fixed;
-    top: 45px;
+    top: 70px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 18px;
+    font-size: 24px;
     font-weight: bold;
     color: yellow;
     text-shadow: 0 0 15px yellow;
     pointer-events: none;
-    z-index: 5;
 }
 
-/* 🎮 MOBILE CONTROL BOX (NEAT & CLEAN PANEL) */
-#control-panel {
-    background: rgba(5, 5, 32, 0.9);
-    border: 2px solid rgba(0, 234, 255, 0.4);
-    box-shadow: 0 0 15px rgba(0, 234, 255, 0.2);
-    border-radius: 15px;
-    width: 100%;
-    max-width: 500px;
+/* MOBILE TOUCH CONTROLS */
+#controls {
     display: flex;
-    justify-content: space-around;
-    align-items: center;
-    padding: 6px 10px;
-    margin-bottom: 2px;
+    justify-content: space-between;
+    width: 95vw;
+    max-width: 800px;
+    margin: 10px auto 0 auto;
+    padding: 0 10px;
 }
 
-.dpad {
-    display: grid;
-    grid-template-columns: 55px 55px 55px;
-    grid-template-rows: 40px 40px;
-    gap: 3px;
-    justify-content: center;
+.control-group {
+    display: flex;
+    gap: 15px;
 }
 
 .mob-btn {
-    font-size: 18px;
-    background: rgba(0, 234, 255, 0.25);
+    width: 75px;
+    height: 60px;
+    font-size: 22px;
+    background: rgba(0, 234, 255, 0.2);
     border: 2px solid #00eaff;
     color: #00eaff;
-    border-radius: 8px;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-    user-select: none;
-    -webkit-user-select: none;
-}
-
-.mob-btn:active {
-    background: rgba(0, 234, 255, 0.7);
-}
-
-#upBtn { grid-column: 2; grid-row: 1; }
-#leftBtn { grid-column: 1; grid-row: 2; }
-#downBtn { grid-column: 2; grid-row: 2; }
-#rightBtn { grid-column: 3; grid-row: 2; }
-
-#shootBtn {
-    background: rgba(255, 49, 88, 0.3);
-    border: 2px solid #ff3158;
-    color: #ff3158;
-    width: 100px;
-    height: 70px;
-    font-size: 16px;
-    font-weight: bold;
     border-radius: 12px;
     display: flex;
     align-items: center;
@@ -184,38 +132,44 @@ button:hover {
     -webkit-user-select: none;
 }
 
+.mob-btn:active {
+    background: rgba(0, 234, 255, 0.6);
+}
+
+#shootBtn {
+    background: rgba(255, 49, 88, 0.25);
+    border: 2px solid #ff3158;
+    color: #ff3158;
+    width: 100px;
+}
+
 #shootBtn:active {
-    background: rgba(255, 49, 88, 0.7);
+    background: rgba(255, 49, 88, 0.6);
 }
 </style>
 </head>
 
 <body>
 
-<div id="game-container">
-    <div>
-        <h1>🚀 SPACE SHOOTER - UTKARSH</h1>
-        <div id="info">
-            Score: <span id="score">0</span>
-            &nbsp; | &nbsp;
-            ❤️ Lives: <span id="lives">3</span>
-            &nbsp; | &nbsp;
-            ⭐ Level: <span id="level">1</span>
-        </div>
-    </div>
+<h1>🚀 SPACE SHOOTER - UTKARSH</h1>
 
-    <canvas id="game"></canvas>
+<div id="info">
+    Score: <span id="score">0</span>
+    &nbsp; | &nbsp;
+    ❤️ Lives: <span id="lives">3</span>
+    &nbsp; | &nbsp;
+    ⭐ Level: <span id="level">1</span>
+</div>
 
-    <!-- MOBILE CONTROL BOX -->
-    <div id="control-panel">
-        <div class="dpad">
-            <div class="mob-btn" id="upBtn">⬆️</div>
-            <div class="mob-btn" id="leftBtn">⬅️</div>
-            <div class="mob-btn" id="downBtn">⬇️</div>
-            <div class="mob-btn" id="rightBtn">➡️</div>
-        </div>
-        <div id="shootBtn">🔥 FIRE</div>
+<canvas id="game" width="800" height="480"></canvas>
+
+<!-- MOBILE CONTROLS -->
+<div id="controls">
+    <div class="control-group">
+        <div class="mob-btn" id="leftBtn">⬅️</div>
+        <div class="mob-btn" id="rightBtn">➡️</div>
     </div>
+    <div class="mob-btn" id="shootBtn">🔥 SHOOT</div>
 </div>
 
 <div id="message"></div>
@@ -224,8 +178,7 @@ button:hover {
 <div id="startScreen" class="screen">
     <h2>🚀 SPACE SHOOTER</h2>
     <p><b>Created by Utkarsh</b></p>
-    <p>⬆️ ⬇️ ⬅️ ➡️ / W A S D = Move Anywhere</p>
-    <p>SPACE / FIRE = Khatarnak Laser Gun</p>
+    <p>⬅️ ➡️ / A D = Move | SPACE = Shoot</p>
     <button onclick="startGame()">START GAME</button>
 </div>
 
@@ -239,22 +192,15 @@ button:hover {
 <script>
 
 // ======================================
-// CANVAS & FULLSCREEN SIZING
+// CANVAS
 // ======================================
 
 const canvas = document.getElementById("game");
 const ctx = canvas.getContext("2d");
 
-function resizeCanvas() {
-    canvas.width = window.innerWidth > 800 ? 800 : window.innerWidth - 10;
-    canvas.height = window.innerHeight * 0.62;
-}
-window.addEventListener("resize", resizeCanvas);
-resizeCanvas();
-
 
 // ======================================
-// REAL AUDIO SYSTEM (HEAVY LASER)
+// AUDIO SYSTEM
 // ======================================
 
 const AudioContext =
@@ -277,21 +223,21 @@ function sound(type) {
     const now = audioCtx.currentTime;
 
     if (type === "shoot") {
-        osc.type = "sawtooth";
-        osc.frequency.setValueAtTime(1400, now);
+        osc.type = "square";
+        osc.frequency.setValueAtTime(900, now);
         osc.frequency.exponentialRampToValueAtTime(
-            150,
-            now + .18
+            180,
+            now + .12
         );
 
-        gain.gain.setValueAtTime(.2, now);
+        gain.gain.setValueAtTime(.12, now);
         gain.gain.exponentialRampToValueAtTime(
             .01,
-            now + .18
+            now + .12
         );
 
         osc.start();
-        osc.stop(now + .18);
+        osc.stop(now + .12);
     }
 
     if (type === "explosion") {
@@ -396,20 +342,20 @@ let boss = null;
 
 const player = {
     x: 370,
-    y: 370,
-    width: 50,
-    height: 40,
+    y: 410,
+    width: 60,
+    height: 45,
     speed: 7
 };
 
 
 // ======================================
-// CONTROLS (KEYBOARD + TOUCH D-PAD)
+// KEYBOARD & TOUCH CONTROLS
 // ======================================
 
 document.addEventListener("keydown", e => {
     keys[e.key.toLowerCase()] = true;
-    if (e.code === "Space" || e.key === " ") {
+    if (e.code === "Space") {
         e.preventDefault();
     }
 });
@@ -418,21 +364,9 @@ document.addEventListener("keyup", e => {
     keys[e.key.toLowerCase()] = false;
 });
 
-const upBtn = document.getElementById("upBtn");
-const downBtn = document.getElementById("downBtn");
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 const shootBtn = document.getElementById("shootBtn");
-
-upBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keys["arrowup"] = true; });
-upBtn.addEventListener("touchend", () => { keys["arrowup"] = false; });
-upBtn.addEventListener("mousedown", () => { keys["arrowup"] = true; });
-upBtn.addEventListener("mouseup", () => { keys["arrowup"] = false; });
-
-downBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keys["arrowdown"] = true; });
-downBtn.addEventListener("touchend", () => { keys["arrowdown"] = false; });
-downBtn.addEventListener("mousedown", () => { keys["arrowdown"] = true; });
-downBtn.addEventListener("mouseup", () => { keys["arrowdown"] = false; });
 
 leftBtn.addEventListener("touchstart", (e) => { e.preventDefault(); keys["arrowleft"] = true; });
 leftBtn.addEventListener("touchend", () => { keys["arrowleft"] = false; });
@@ -456,7 +390,7 @@ shootBtn.addEventListener("mouseup", () => { keys[" "] = false; });
 
 let stars = [];
 
-for (let i = 0; i < 150; i++) {
+for (let i = 0; i < 120; i++) {
     stars.push({
         x: Math.random() * canvas.width,
         y: Math.random() * canvas.height,
@@ -486,8 +420,7 @@ function startGame() {
     powerUps = [];
     boss = null;
 
-    player.x = canvas.width / 2 - 25;
-    player.y = canvas.height - 70;
+    player.x = canvas.width / 2 - 30;
 
     running = true;
     updateUI();
@@ -506,7 +439,7 @@ function restartGame() {
 
 
 // ======================================
-// UI & MESSAGES
+// UI
 // ======================================
 
 function updateUI() {
@@ -514,6 +447,11 @@ function updateUI() {
     document.getElementById("lives").textContent = lives;
     document.getElementById("level").textContent = level;
 }
+
+
+// ======================================
+// MESSAGE
+// ======================================
 
 function showMessage(text) {
     const msg = document.getElementById("message");
@@ -530,14 +468,14 @@ function showMessage(text) {
 
 function drawPlayer() {
     ctx.save();
-    ctx.shadowBlur = 25;
+    ctx.shadowBlur = 20;
     ctx.shadowColor = "#00eaff";
     ctx.fillStyle = "#00eaff";
 
     ctx.beginPath();
     ctx.moveTo(player.x + player.width / 2, player.y);
     ctx.lineTo(player.x, player.y + player.height);
-    ctx.lineTo(player.x + player.width / 2, player.y + player.height - 10);
+    ctx.lineTo(player.x + player.width / 2, player.y + player.height - 12);
     ctx.lineTo(player.x + player.width, player.y + player.height);
     ctx.closePath();
     ctx.fill();
@@ -546,28 +484,19 @@ function drawPlayer() {
 
 
 // ======================================
-// KHATARNAK LASER BULLET
+// SHOOT (FIRE GUN)
 // ======================================
 
 function shoot() {
     bullets.push({
-        x: player.x + player.width / 2 - 4,
+        x: player.x + player.width / 2 - 3,
         y: player.y,
-        width: 8,
-        height: 22,
-        speed: 15
+        width: 6,
+        height: 15,
+        speed: 11
     });
 
     sound("shoot");
-}
-
-function drawBullet(bullet) {
-    ctx.save();
-    ctx.fillStyle = "#00ffff";
-    ctx.shadowBlur = 25;
-    ctx.shadowColor = "#ff00ff";
-    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
-    ctx.restore();
 }
 
 
@@ -577,18 +506,23 @@ function drawBullet(bullet) {
 
 function createEnemy() {
     enemies.push({
-        x: Math.random() * (canvas.width - 40),
+        x: Math.random() * (canvas.width - 45),
         y: -50,
-        width: 40,
-        height: 35,
+        width: 45,
+        height: 40,
         speed: 2 + Math.random() * 2 + level * .2
     });
 }
 
+
+// ======================================
+// DRAW ENEMY
+// ======================================
+
 function drawEnemy(enemy) {
     ctx.save();
     ctx.fillStyle = "#ff3158";
-    ctx.shadowBlur = 18;
+    ctx.shadowBlur = 15;
     ctx.shadowColor = "#ff3158";
 
     ctx.beginPath();
@@ -599,6 +533,19 @@ function drawEnemy(enemy) {
     ctx.closePath();
     ctx.fill();
     ctx.restore();
+}
+
+
+// ======================================
+// BULLET
+// ======================================
+
+function drawBullet(bullet) {
+    ctx.fillStyle = "yellow";
+    ctx.shadowBlur = 15;
+    ctx.shadowColor = "yellow";
+    ctx.fillRect(bullet.x, bullet.y, bullet.width, bullet.height);
+    ctx.shadowBlur = 0;
 }
 
 
@@ -617,14 +564,13 @@ function createPowerUp(x, y) {
 }
 
 function drawPowerUp(p) {
-    ctx.save();
     ctx.fillStyle = "#00ff66";
     ctx.shadowBlur = 20;
     ctx.shadowColor = "#00ff66";
     ctx.beginPath();
     ctx.arc(p.x + 12, p.y + 12, 12, 0, Math.PI * 2);
     ctx.fill();
-    ctx.restore();
+    ctx.shadowBlur = 0;
 }
 
 
@@ -634,7 +580,7 @@ function drawPowerUp(p) {
 
 function createBoss() {
     boss = {
-        x: canvas.width / 2 - 100,
+        x: 300,
         y: 40,
         width: 200,
         height: 80,
@@ -648,7 +594,6 @@ function createBoss() {
 
 function drawBoss() {
     if (!boss) return;
-    ctx.save();
     ctx.fillStyle = "#a000ff";
     ctx.shadowBlur = 25;
     ctx.shadowColor = "#a000ff";
@@ -657,13 +602,13 @@ function drawBoss() {
     ctx.fillStyle = "red";
     ctx.fillRect(boss.x + 25, boss.y + 25, 30, 20);
     ctx.fillRect(boss.x + boss.width - 55, boss.y + 25, 30, 20);
-    ctx.restore();
+    ctx.shadowBlur = 0;
 
-    // Health bar
+    // Boss health bar
     ctx.fillStyle = "red";
-    ctx.fillRect(canvas.width / 2 - 150, 10, 300, 15);
+    ctx.fillRect(250, 10, 300, 15);
     ctx.fillStyle = "lime";
-    ctx.fillRect(canvas.width / 2 - 150, 10, 300 * (boss.health / boss.maxHealth), 15);
+    ctx.fillRect(250, 10, 300 * (boss.health / boss.maxHealth), 15);
 }
 
 
@@ -685,7 +630,7 @@ function drawStars() {
 
 
 // ======================================
-// COLLISION (PRECISE)
+// COLLISION
 // ======================================
 
 function collision(a, b) {
@@ -708,22 +653,19 @@ function gameLoop() {
     ctx.clearRect(0, 0, canvas.width, canvas.height);
     drawStars();
 
-    // Player Movement (All 4 directions)
+    // Player Movement
     if (keys["arrowleft"] || keys["a"]) player.x -= player.speed;
     if (keys["arrowright"] || keys["d"]) player.x += player.speed;
-    if (keys["arrowup"] || keys["w"]) player.y -= player.speed;
-    if (keys["arrowdown"] || keys["s"]) player.y += player.speed;
 
-    // Boundaries
     if (player.x < 0) player.x = 0;
-    if (player.x + player.width > canvas.width) player.x = canvas.width - player.width;
-    if (player.y < 0) player.y = 0;
-    if (player.y + player.height > canvas.height) player.y = canvas.height - player.height;
+    if (player.x + player.width > canvas.width) {
+        player.x = canvas.width - player.width;
+    }
 
     // Shoot
     if (keys[" "] || keys["space"]) {
         const now = Date.now();
-        if (now - lastShot > 160) {
+        if (now - lastShot > 220) {
             shoot();
             lastShot = now;
         }
@@ -750,17 +692,19 @@ function gameLoop() {
         enemy.y += enemy.speed;
         drawEnemy(enemy);
 
-        // ONLY reduce life when actually touching the player
+        // Enemy hits player (ONLY when touching player)
         if (collision(player, enemy)) {
             enemies.splice(ei, 1);
             lives--;
             sound("hit");
             updateUI();
-        } 
+        }
+        // Enemy leaves screen (Safe deletion without life penalty)
         else if (enemy.y > canvas.height) {
             enemies.splice(ei, 1);
         }
 
+        // Bullet hits enemy
         bullets.forEach((bullet, bi) => {
             if (collision(bullet, enemy)) {
                 enemies.splice(ei, 1);
@@ -790,7 +734,7 @@ function gameLoop() {
         }
     });
 
-    // Levels
+    // Level System
     const newLevel = Math.floor(score / 100) + 1;
     if (newLevel > level) {
         level = newLevel;
