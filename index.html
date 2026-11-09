@@ -3,7 +3,7 @@
 <head>
 <meta charset="UTF-8">
 <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
-<title>🚀 Space Shooter by Uttakarsh</title>
+<title>🚀 Space Shooter - Utkarsh</title>
 
 <style>
 * {
@@ -22,22 +22,22 @@ body {
 
 h1 {
     color: #00eaff;
-    text-shadow: 0 0 20px #00eaff;
-    margin: 8px;
-    font-size: 24px;
+    text-shadow: 0 0 15px #00eaff;
+    margin: 6px 0 2px 0;
+    font-size: 22px;
 }
 
 #info {
-    font-size: 16px;
-    margin-bottom: 5px;
+    font-size: 15px;
+    margin-bottom: 4px;
 }
 
 canvas {
     background: #050520;
-    border: 3px solid #00eaff;
-    box-shadow: 0 0 25px #00eaff;
+    border: 2px solid #00eaff;
+    box-shadow: 0 0 20px #00eaff;
     max-width: 95vw;
-    max-height: 65vh;
+    max-height: 62vh;
     display: block;
     margin: 0 auto;
 }
@@ -54,15 +54,15 @@ canvas {
 }
 
 .screen h2 {
-    font-size: 38px;
+    font-size: 36px;
     color: #00eaff;
-    text-shadow: 0 0 25px #00eaff;
+    text-shadow: 0 0 20px #00eaff;
     margin: 10px;
 }
 
 .screen p {
-    margin: 8px 0;
-    font-size: 16px;
+    margin: 6px 0;
+    font-size: 15px;
 }
 
 button {
@@ -93,10 +93,10 @@ button:hover {
 
 #message {
     position: fixed;
-    top: 70px;
+    top: 60px;
     left: 50%;
     transform: translateX(-50%);
-    font-size: 24px;
+    font-size: 22px;
     font-weight: bold;
     color: yellow;
     text-shadow: 0 0 15px yellow;
@@ -109,7 +109,7 @@ button:hover {
     justify-content: space-between;
     width: 95vw;
     max-width: 800px;
-    margin: 10px auto 0 auto;
+    margin: 8px auto 0 auto;
     padding: 0 10px;
 }
 
@@ -119,9 +119,9 @@ button:hover {
 }
 
 .mob-btn {
-    width: 70px;
-    height: 60px;
-    font-size: 22px;
+    width: 65px;
+    height: 55px;
+    font-size: 20px;
     background: rgba(0, 234, 255, 0.2);
     border: 2px solid #00eaff;
     color: #00eaff;
@@ -141,7 +141,7 @@ button:hover {
     background: rgba(255, 49, 88, 0.2);
     border: 2px solid #ff3158;
     color: #ff3158;
-    width: 90px;
+    width: 85px;
 }
 
 #shootBtn:active {
@@ -152,7 +152,7 @@ button:hover {
 
 <body>
 
-<h1>🚀 SPACE SHOOTER - BY UTKARSH</h1>
+<h1>🚀 SPACE SHOOTER - UTKARSH</h1>
 
 <div id="info">
     Score: <span id="score">0</span>
@@ -162,7 +162,7 @@ button:hover {
     ⭐ Level: <span id="level">1</span>
 </div>
 
-<canvas id="game" width="800" height="500"></canvas>
+<canvas id="game" width="800" height="480"></canvas>
 
 <!-- MOBILE CONTROLS -->
 <div id="controls">
@@ -178,16 +178,14 @@ button:hover {
 <!-- START SCREEN -->
 <div id="startScreen" class="screen">
     <h2>🚀 SPACE SHOOTER</h2>
-    <p><b>Developer: UTKARSH</b></p>
+    <p><b>Created by Utkarsh</b></p>
     <p>⬅️ ➡️ / A D = Move | SPACE = Shoot</p>
-    <p>📱 Mobile Touch Buttons Added Below!</p>
     <button onclick="startGame()">START GAME</button>
 </div>
 
 <!-- GAME OVER -->
 <div id="gameOver" class="screen hidden">
     <h2>💥 GAME OVER</h2>
-    <p>Player: <strong>Utkarsh's Game</strong></p>
     <p>Your Score: <strong id="finalScore">0</strong></p>
     <button onclick="restartGame()">PLAY AGAIN</button>
 </div>
@@ -388,7 +386,7 @@ let boss = null;
 const player = {
 
     x: 370,
-    y: 430,
+    y: 410,
 
     width: 60,
     height: 45,
@@ -418,7 +416,6 @@ document.addEventListener("keyup", e => {
 
 });
 
-// Mobile button listeners
 const leftBtn = document.getElementById("leftBtn");
 const rightBtn = document.getElementById("rightBtn");
 const shootBtn = document.getElementById("shootBtn");
@@ -585,13 +582,6 @@ function drawPlayer() {
     ctx.closePath();
 
     ctx.fill();
-
-    // Draw Name tag on player
-    ctx.fillStyle = "#ffffff";
-    ctx.font = "11px Arial";
-    ctx.shadowBlur = 5;
-    ctx.shadowColor = "yellow";
-    ctx.fillText("UTKARSH", player.x + 5, player.y - 8);
 
     ctx.restore();
 
