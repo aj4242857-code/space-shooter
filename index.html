@@ -35,13 +35,14 @@ body, html {
     align-items: center;
     width: 100vw;
     height: 100vh;
-    padding: 4px;
+    padding: 6px;
+    background: #03030d;
 }
 
 h1 {
     color: #00eaff;
     text-shadow: 0 0 15px #00eaff;
-    font-size: 17px;
+    font-size: 16px;
     margin: 2px 0;
 }
 
@@ -56,7 +57,7 @@ canvas {
     box-shadow: 0 0 20px #00eaff;
     width: 100%;
     flex-grow: 1;
-    max-height: 68vh;
+    max-height: 64vh;
     display: block;
 }
 
@@ -122,27 +123,32 @@ button:hover {
     z-index: 5;
 }
 
-/* MOBILE TOUCH CONTROLS (FULL D-PAD) */
-#controls {
+/* 🎮 MOBILE CONTROL BOX (NEAT & CLEAN PANEL) */
+#control-panel {
+    background: rgba(5, 5, 32, 0.85);
+    border: 2px solid rgba(0, 234, 255, 0.4);
+    box-shadow: 0 0 15px rgba(0, 234, 255, 0.2);
+    border-radius: 15px;
+    width: 100%;
+    max-width: 500px;
     display: flex;
     justify-content: space-around;
     align-items: center;
-    width: 100%;
-    max-width: 800px;
-    padding: 4px;
+    padding: 8px 10px;
+    margin-bottom: 2px;
 }
 
 .dpad {
     display: grid;
-    grid-template-columns: 60px 60px 60px;
-    grid-template-rows: 45px 45px;
-    gap: 4px;
+    grid-template-columns: 55px 55px 55px;
+    grid-template-rows: 42px 42px;
+    gap: 3px;
     justify-content: center;
 }
 
 .mob-btn {
     font-size: 18px;
-    background: rgba(0, 234, 255, 0.25);
+    background: rgba(0, 234, 255, 0.2);
     border: 2px solid #00eaff;
     color: #00eaff;
     border-radius: 8px;
@@ -154,7 +160,7 @@ button:hover {
 }
 
 .mob-btn:active {
-    background: rgba(0, 234, 255, 0.7);
+    background: rgba(0, 234, 255, 0.6);
 }
 
 #upBtn { grid-column: 2; grid-row: 1; }
@@ -163,12 +169,12 @@ button:hover {
 #rightBtn { grid-column: 3; grid-row: 2; }
 
 #shootBtn {
-    background: rgba(255, 49, 88, 0.3);
+    background: rgba(255, 49, 88, 0.25);
     border: 2px solid #ff3158;
     color: #ff3158;
-    width: 110px;
+    width: 100px;
     height: 75px;
-    font-size: 18px;
+    font-size: 16px;
     font-weight: bold;
     border-radius: 12px;
     display: flex;
@@ -179,7 +185,7 @@ button:hover {
 }
 
 #shootBtn:active {
-    background: rgba(255, 49, 88, 0.7);
+    background: rgba(255, 49, 88, 0.6);
 }
 </style>
 </head>
@@ -200,8 +206,8 @@ button:hover {
 
     <canvas id="game"></canvas>
 
-    <!-- MOBILE CONTROLS (ALL 4 BUTTONS) -->
-    <div id="controls">
+    <!-- MOBILE CONTROL BOX -->
+    <div id="control-panel">
         <div class="dpad">
             <div class="mob-btn" id="upBtn">⬆️</div>
             <div class="mob-btn" id="leftBtn">⬅️</div>
@@ -241,7 +247,7 @@ const ctx = canvas.getContext("2d");
 
 function resizeCanvas() {
     canvas.width = window.innerWidth > 800 ? 800 : window.innerWidth - 10;
-    canvas.height = window.innerHeight * 0.62;
+    canvas.height = window.innerHeight * 0.60;
 }
 window.addEventListener("resize", resizeCanvas);
 resizeCanvas();
